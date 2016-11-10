@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="100%" width="100%" viewBox="0 0 2752.77 1537.63">
+  <style id="style_css_sheet" type="text/css">
+    /*
+     * Below are Cascading Style Sheet (CSS) definitions in use in this file,
+     * which allow easily changing how countries are displayed.
+     *
+     */
+
+    /*
+    * Circles around small countries
+    *
+    * Change opacity to 1 to display all circles.
+    *
+    */
+    .circlexx { opacity:1; fill:#e0e0e0; stroke:#000000; stroke-width:0.4; }
+    /*
+    * Smaller circles around French DOMs and Chinese SARs
+    *
+    * Change opacity to 1 to display all subnational circles.
+    *
+    */
+    .subxx { opacity:1; stroke-width:0.3; }
+    /*
+    * Circles around small, unrecognized countries
+    *
+    * Change opacity to 1 to display all circles.
+    *
+    */
+    .unxx { opacity:0; fill:#e0e0e0; stroke:#000000; stroke-width:0.3; }
+    /*
+    * Circles around small countries, but with no permanent residents
+    *
+    * Change opacity to 1 to display all circles.
+    *
+    */
+    .noxx { opacity:1; fill:#e0e0e0; stroke:#000000; stroke-width:0.5; }
+    /*
+    * land
+    */
+    .landxx { fill: #e0e0e0; stroke:#ffffff; stroke-width:0.5; fill-rule:evenodd; }
+    /*
+   * land on hover
+   */
+    .landxxHover { fill: #bbb; stroke:#ffffff; stroke-width:0.5; fill-rule:evenodd; }
+    /*
+    * Styles for coastlines of islands with no borders
+    */
+    .coastxx { stroke:#ffffff; stroke-width:0.3; fill-rule:evenodd; }
+    /*
+    * Styles for nations with limited recognition
+    */
+    .limitxx { fill: #e0e0e0; stroke:#ffffff; stroke-width:0; fill-rule:evenodd; }
+    /*
+    * Ocean
+    */
+    .oceanxx { opacity: 1; color: #000000; fill:#ffffff; stroke:#000; stroke-width:0.5; stroke-miterlimit:1; }
+    /*
+    * Additional style rules
+    *
+    * The following are examples of colouring countries. You can substitute these with your own styles to colour the countries on the map.
+    *
+    * Color a few countries:
+    *
+    * .gb, .au, .nc
+    * {
+    * fill: #ff0000;
+    * }
+    *
+    * Color a few small country circles (and the countries):
+    *
+    * .ms, .ky
+    * {
+    * opacity: 1;
+    * fill: #ff0000;
+    * }
+    *
+    */
+  </style>
+
+
+  <a *ngFor="let country of (this.countriesObservable | async )">
+    <g id="{{country.id}}" [country]="country" (click)="clickMe(country)" (mouseover)="onHoverCountry(country)" (mouseleave)="onLeaveCountry(country)"/>
+  </a>
+
+</svg>

@@ -1,0 +1,50 @@
+/* tslint:disable:no-unused-variable */
+
+import { TestBed, async } from '@angular/core/testing';
+import { By }              from '@angular/platform-browser';
+
+import { AppComponent } from './app.component';
+import { MapSVGComponent } from './map/map.svg';
+import { CountrySVGComponent } from './map/country.svg';
+import { CountryRepository } from './map/repository/country.repository';
+import { Country } from './map/model/country';
+import { CONTRY_REPO_TOKEN } from './map/repository/country.repository.constants';
+
+class CountryRepositoryMock implements CountryRepository {
+  loadCountries(): Array<Country> {
+    return [];
+  }
+  saveCountry(country: Country): void {
+
+  }
+  saveCountryWithPath(country: Country, path: any): void {
+
+  }
+}
+
+describe('App: Ponyracer', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [
+        AppComponent,
+        MapSVGComponent,
+        CountrySVGComponent
+      ],
+      providers: [{provide: CONTRY_REPO_TOKEN, useClass: CountryRepositoryMock}]
+    });
+  });
+
+  it('should create the app', async(() => {
+    let fixture = TestBed.createComponent(AppComponent);
+    let app = fixture.debugElement.componentInstance;
+    expect(app).toBeTruthy();
+  }));
+
+  it(`should contains one child of type map 'MapSVGComponent'`, async(() => {
+    let fixture = TestBed.createComponent(AppComponent);
+
+    let maps = fixture.debugElement.queryAll(By.directive(MapSVGComponent));
+    expect(maps.length).toBe(1);
+  }));
+
+});
