@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">87.5% </span>
+        <span class="strong">90% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>42/48</span>
+        <span class='fraction'>36/40</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">25% </span>
@@ -30,14 +30,14 @@
         <span class='fraction'>2/8</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">60% </span>
+        <span class="strong">66.67% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>9/15</span>
+        <span class='fraction'>8/12</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">86.36% </span>
+        <span class="strong">88.89% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>38/44</span>
+        <span class='fraction'>32/36</span>
       </div>
     </div>
   </div>
@@ -115,22 +115,13 @@
 70
 71
 72
-73
-74
-75
-76
-77
-78
-79
-80
-81
-82
-83</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+73</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -156,12 +147,8 @@
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
@@ -172,17 +159,11 @@
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
@@ -191,8 +172,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
@@ -200,6 +179,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
@@ -213,6 +193,7 @@ import { Observable } from 'rxjs/Rx';
 import { CountryRepository } from './country.repository';
 &nbsp;
 // Import RxJs required methods
+import { zip } from 'rxjs/observable/zip';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 &nbsp;
@@ -222,69 +203,58 @@ import { Config } from '../../config/config';
 @Injectable()
 export class CountryRepositoryService implements CountryRepository {
 &nbsp;
-  private countries: Array&lt;Country&gt; = [];
+  private countries:Array&lt;Country&gt; = [];
 &nbsp;
-  constructor(private http: Http, private config: Config) {
+  constructor(private http:Http, private config:Config) {
 &nbsp;
   };
 &nbsp;
 &nbsp;
-  loadCountries(): Array&lt;Country&gt; {
+  loadCountries():Observable&lt;Array&lt;Country&gt;&gt; {
 &nbsp;
     <span class="missing-if-branch" title="if path not taken" >I</span>if (this.countries.length !== 0) {
-<span class="cstat-no" title="statement not covered" >      return this.countries;</span>
+<span class="cstat-no" title="statement not covered" >      return Observable.of(this.countries);</span>
     }
 &nbsp;
-    let countryCodesObs = this.fetchCountryCodes();
+    return zip(this.fetchRawSVGContries(), this.fetchCountryCodes(),
+      (xmlDocument, codeList) =&gt;{
+        let convert = require('xml-js');
+        let parsedResult = convert.xml2js(xmlDocument, {compact: false, spaces: 4});
 &nbsp;
-    this.fetchRawSVGContries().subscribe(
-      (xmlDocument) =&gt; {
-        countryCodesObs.subscribe(
-          (codeList) =&gt; {
-            let convert = require('xml-js');
-            let parsedResult = convert.xml2js(xmlDocument, {compact: false, spaces: 4});
-            console.info(parsedResult);
-            for (let countryJson of parsedResult.elements[0].elements) {
+        for (let countryJson of parsedResult.elements[0].elements) {
 &nbsp;
-              <span class="missing-if-branch" title="if path not taken" >I</span>if (countryJson.name !== 'g') {
-<span class="cstat-no" title="statement not covered" >                continue;</span>
-              }
+          <span class="missing-if-branch" title="if path not taken" >I</span>if (countryJson.name !== 'g') {
+<span class="cstat-no" title="statement not covered" >            continue;</span>
+          }
 &nbsp;
-              let countrySvgContent = convert.js2xml(countryJson, {compact: false, spaces: 4});
-              let countryId: string = countryJson.attributes.id.toUpperCase();
-              this.countries.push(new Country(countrySvgContent, countryId, codeList[countryId]));
-            }
-          },
-<span class="fstat-no" title="function not covered" >          (error)</span> =&gt; <span class="cstat-no" title="statement not covered" >console.error(error)</span>
-        );
-      },
-<span class="fstat-no" title="function not covered" >      (error)</span> =&gt; <span class="cstat-no" title="statement not covered" >console.error(error)</span>
+          let countrySvgContent = convert.js2xml(countryJson, {compact: false, spaces: 4});
+          let countryId: string = countryJson.attributes.id.toUpperCase();
+          this.countries.push(new Country(countrySvgContent, countryId, codeList[countryId]));
+        }
+          return this.countries;
+      }
     );
-    return this.countries;
   }
 &nbsp;
-  fetchRawSVGContries(): Observable&lt;XMLDocument&gt; {
-    let url = this.config.get('svgUrl');
-    console.debug('url for fetching SVG = ' + url);
+  fetchRawSVGContries():Observable&lt;XMLDocument&gt; {
 &nbsp;
-    return this.http.get(url)
-      .map((res: Response) =&gt; res.text())
-      .catch(<span class="fstat-no" title="function not covered" >(error: any)</span> =&gt; <span class="cstat-no" title="statement not covered" >Observable.throw(error.json().error || 'Server error'))</span>;
+    return this.http.get(this.config.get('svgUrl'))
+      .map((res:Response) =&gt; res.text())
+      .catch(<span class="fstat-no" title="function not covered" >(error:any)</span> =&gt; <span class="cstat-no" title="statement not covered" >Observable.throw(error.json().error || 'Server error'))</span>;
   }
 &nbsp;
-  fetchCountryCodes(): Observable&lt;JSON&gt; {
-    let url = this.config.get('countryCodesUrl');
-    console.debug('url for fetching country codes = ' + url);
+  fetchCountryCodes():Observable&lt;JSON&gt; {
 &nbsp;
-    return this.http.get(url)
-      .map((res: Response) =&gt; res.json())
-      .catch(<span class="fstat-no" title="function not covered" >(error: any)</span> =&gt; <span class="cstat-no" title="statement not covered" >Observable.throw(error.json().error || 'Server error'))</span>;
+    return this.http.get(this.config.get('countryCodesUrl'))
+      .map((res:Response) =&gt; res.json())
+      .catch(<span class="fstat-no" title="function not covered" >(error:any)</span> =&gt; <span class="cstat-no" title="statement not covered" >Observable.throw(error.json().error || 'Server error'))</span>;
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  saveCountry(country: Country)</span>: void {
+<span class="fstat-no" title="function not covered" >  saveCountry(country:Country)</span>:void {
 &nbsp;
   }
-<span class="fstat-no" title="function not covered" >  saveCountryWithPath(country: Country, path: any)</span>: void {
+&nbsp;
+<span class="fstat-no" title="function not covered" >  saveCountryWithPath(country:Country, path:any)</span>:void {
 &nbsp;
   };
 }
@@ -295,7 +265,7 @@ export class CountryRepositoryService implements CountryRepository {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Nov 06 2016 18:44:06 GMT+0100 (Centre de l’Europe)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Nov 11 2016 00:05:44 GMT+0100 (Centre de l’Europe)
 </div>
 </div>
 <script src="../../../../prettify.js"></script>

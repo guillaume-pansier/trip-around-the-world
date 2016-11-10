@@ -73,11 +73,12 @@ describe('Service: CountryRepository', () => {
       });
 
 
-      let loadedCountries = service.loadCountries();
+      service.loadCountries().subscribe((loadedCountries) =>{
+        expect(loadedCountries.length).toBe(1);
+        expect(loadedCountries[0].id).toBe('VA');
+        expect(loadedCountries[0].name).toBe('testID');
+      });
 
-      expect(loadedCountries.length).toBe(1);
-      expect(loadedCountries[0].id).toBe('VA');
-      expect(loadedCountries[0].name).toBe('testID');
     })));
 
 });
