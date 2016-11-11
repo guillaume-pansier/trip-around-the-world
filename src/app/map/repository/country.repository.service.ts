@@ -29,48 +29,56 @@ export class CountryRepositoryService implements CountryRepository {
 
     return zip(this.fetchRawSVGContries(), this.fetchCountryCodes(),
       (xmlDocument, codeList) => {
-        let convert = require('xml-js');
-        let parsedResult = convert.xml2js(xmlDocument, {compact: false, spaces: 4});
+        let xmlJsonConverter = require('xml-js');
+        let countriesJson = xmlJsonConverter.xml2js(xmlDocument, {compact: false, spaces: 4});
 
-        for (let countryJson of parsedResult.elements[0].elements) {
+        for (let countryJson of countriesJson.elements[0].elements) {
 
           if (countryJson.name !== 'g') {
             continue;
           }
 
-          let countryId:string = countryJson.attributes.id.toUpperCase();
-          let countryName = codeList[countryId];
-
-          for (let subElement of countryJson.elements) {
-            let subElementId = subElement.attributes ? subElement.attributes.id.toUpperCase() : undefined;
-            if (subElementId && subElementId != countryId) {
-              if (codeList[subElementId]) {
-                console.dir('found: ' + subElementId + ' = ' + codeList[subElementId]);
-                subElement.elements.push(
-                  {
-                    name: 'title',
-                    type: 'element',
-                    elements: [
-                      {
-                        text: codeList[subElementId],
-                        type: 'text'
-                      }
-                    ]
-                  });
-                console.dir(subElement);
-              }
-            }
-          }
-
-          let countrySvgContent = '<title id="title_' + countryId + '">' + countryName + '</title>\n>';
-          countrySvgContent += convert.js2xml(countryJson, {compact: false, spaces: 4});
-
-          this.countries.push(new Country(countrySvgContent, countryId, countryName));
+          this.countries.push(this.paseCountry(countryJson, codeList, xmlJsonConverter));
         }
+
         return this.countries;
       }
     );
   }
+
+  private paseCountry(countryJson, codeList, convert):Country {
+    let countryId:string = countryJson.attributes.id.toUpperCase();
+    let countryName = codeList[countryId];
+
+    for (let subElement of countryJson.elements) {
+      this.addSubElementTitle(subElement, countryId, codeList);
+    }
+
+    let countrySvgContent = '<title id="title_' + countryId + '">' + countryName + '</title>\n>';
+    countrySvgContent += convert.js2xml(countryJson, {compact: false, spaces: 4});
+    return new Country(countrySvgContent, countryId, countryName);
+
+  };
+
+  private addSubElementTitle(subElement, countryId, codeList) {
+    let subElementId = subElement.attributes ? subElement.attributes.id.toUpperCase() : undefined;
+    if (subElementId && subElementId != countryId) {
+      if (codeList[subElementId]) {
+        subElement.elements.push(
+          {
+            name: 'title',
+            type: 'element',
+            elements: [
+              {
+                text: codeList[subElementId],
+                type: 'text'
+              }
+            ]
+          });
+      }
+    }
+    return subElementId;
+  };
 
   fetchRawSVGContries():Observable<XMLDocument> {
 
