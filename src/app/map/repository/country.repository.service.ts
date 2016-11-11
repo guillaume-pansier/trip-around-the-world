@@ -47,7 +47,7 @@ export class CountryRepositoryService implements CountryRepository {
   }
 
   private paseCountry(countryJson, codeList, convert): Country {
-    let countryId:string = countryJson.attributes.id.toUpperCase();
+    let countryId: string = countryJson.attributes.id.toUpperCase();
     let countryName = codeList[countryId];
 
     for (let subElement of countryJson.elements) {
@@ -94,7 +94,7 @@ export class CountryRepositoryService implements CountryRepository {
       .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
   }
 
-  saveCountry(country:Country):void {
+  saveCountry(country: Country): void {
 
   }
 
