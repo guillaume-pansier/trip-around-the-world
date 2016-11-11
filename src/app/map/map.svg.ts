@@ -17,7 +17,7 @@ export class MapSVGComponent implements OnInit {
 
   private countriesObservable: Observable<Array<Country>>;
 
-  constructor(@Inject(DOCUMENT) private document, @Inject(CONTRY_REPO_TOKEN) private countryRepository:CountryRepository) {
+  constructor(@Inject(DOCUMENT) private document, @Inject(CONTRY_REPO_TOKEN) private countryRepository: CountryRepository) {
 
   }
 
@@ -25,16 +25,16 @@ export class MapSVGComponent implements OnInit {
     this.countriesObservable = this.countryRepository.loadCountries();
   }
 
-  clickMe(country:Country) {
+  clickMe(country: Country) {
     alert('Country ' + country.id + ' : ' + country.name + ' clicked');
     console.log(this.document.getElementById(country.id));
   }
 
-  onHoverCountry(country:Country) {
+  onHoverCountry(country: Country) {
     this.changeCountryStyle(country.id, STYLE_CLASS_NORMAL, STYLE_CLASS_HOVER);
   }
 
-  onLeaveCountry(country:Country) {
+  onLeaveCountry(country: Country) {
     this.changeCountryStyle(country.id, STYLE_CLASS_HOVER, STYLE_CLASS_NORMAL);
   }
 

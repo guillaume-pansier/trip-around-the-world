@@ -20,11 +20,11 @@ class ConfigTest {
   load() {
   };
 
-  getEnv(key:any) {
+  getEnv(key: any) {
     return '';
   }
 
-  get(key:any) {
+  get(key: any) {
     if ('svgUrl' === key) {
       return URL_SVG;
     } else {

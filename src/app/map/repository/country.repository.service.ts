@@ -14,14 +14,14 @@ import { Config } from '../../config/config';
 @Injectable()
 export class CountryRepositoryService implements CountryRepository {
 
-  private countries:Array<Country> = [];
+  private countries: Array<Country> = [];
 
-  constructor(private http:Http, private config:Config) {
+  constructor(private http: Http, private config: Config) {
 
   };
 
 
-  loadCountries():Observable<Array<Country>> {
+  loadCountries(): Observable<Array<Country>> {
 
     if (this.countries.length !== 0) {
       return Observable.of(this.countries);
@@ -46,7 +46,7 @@ export class CountryRepositoryService implements CountryRepository {
     );
   }
 
-  private paseCountry(countryJson, codeList, convert):Country {
+  private paseCountry(countryJson, codeList, convert): Country {
     let countryId:string = countryJson.attributes.id.toUpperCase();
     let countryName = codeList[countryId];
 
@@ -80,25 +80,25 @@ export class CountryRepositoryService implements CountryRepository {
     return subElementId;
   };
 
-  fetchRawSVGContries():Observable<XMLDocument> {
+  fetchRawSVGContries(): Observable<XMLDocument> {
 
     return this.http.get(this.config.get('svgUrl'))
-      .map((res:Response) => res.text())
-      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+      .map((res: Response) => res.text())
+      .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
   }
 
-  fetchCountryCodes():Observable<JSON> {
+  fetchCountryCodes(): Observable<JSON> {
 
     return this.http.get(this.config.get('countryCodesUrl'))
-      .map((res:Response) => res.json())
-      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+      .map((res: Response) => res.json())
+      .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
   }
 
   saveCountry(country:Country):void {
 
   }
 
-  saveCountryWithPath(country:Country, path:any):void {
+  saveCountryWithPath(country: Country, path: any): void {
 
   };
 }
