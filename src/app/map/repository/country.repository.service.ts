@@ -62,7 +62,7 @@ export class CountryRepositoryService implements CountryRepository {
 
   private addSubElementTitle(subElement, countryId, codeList) {
     let subElementId = subElement.attributes ? subElement.attributes.id.toUpperCase() : undefined;
-    if (subElementId && subElementId != countryId) {
+    if (subElementId && subElementId !== countryId) {
       if (codeList[subElementId]) {
         subElement.elements.push(
           {
