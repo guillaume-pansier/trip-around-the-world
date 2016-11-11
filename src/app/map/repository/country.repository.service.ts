@@ -28,7 +28,7 @@ export class CountryRepositoryService implements CountryRepository {
     }
 
     return zip(this.fetchRawSVGContries(), this.fetchCountryCodes(),
-      (xmlDocument, codeList) =>{
+      (xmlDocument, codeList) => {
         let convert = require('xml-js');
         let parsedResult = convert.xml2js(xmlDocument, {compact: false, spaces: 4});
 
@@ -38,11 +38,36 @@ export class CountryRepositoryService implements CountryRepository {
             continue;
           }
 
-          let countrySvgContent = convert.js2xml(countryJson, {compact: false, spaces: 4});
-          let countryId: string = countryJson.attributes.id.toUpperCase();
-          this.countries.push(new Country(countrySvgContent, countryId, codeList[countryId]));
+          let countryId:string = countryJson.attributes.id.toUpperCase();
+          let countryName = codeList[countryId];
+
+          for (let subElement of countryJson.elements) {
+            let subElementId = subElement.attributes ? subElement.attributes.id.toUpperCase() : undefined;
+            if (subElementId && subElementId != countryId) {
+              if (codeList[subElementId]) {
+                console.dir('found: ' + subElementId + ' = ' + codeList[subElementId]);
+                subElement.elements.push(
+                  {
+                    name: 'title',
+                    type: 'element',
+                    elements: [
+                      {
+                        text: codeList[subElementId],
+                        type: 'text'
+                      }
+                    ]
+                  });
+                console.dir(subElement);
+              }
+            }
+          }
+
+          let countrySvgContent = '<title id="title_' + countryId + '">' + countryName + '</title>\n>';
+          countrySvgContent += convert.js2xml(countryJson, {compact: false, spaces: 4});
+
+          this.countries.push(new Country(countrySvgContent, countryId, countryName));
         }
-          return this.countries;
+        return this.countries;
       }
     );
   }
