@@ -4,6 +4,7 @@ import { TestBed, async } from '@angular/core/testing';
 import { By }              from '@angular/platform-browser';
 import { Observable } from 'rxjs/Rx';
 import { from } from 'rxjs/observable/from';
+import { of } from 'rxjs/observable/of';
 import { empty } from 'rxjs/observable/empty';
 
 import { AppComponent } from './app.component';
@@ -24,8 +25,8 @@ class CountryRepositoryMock implements CountryRepository {
   saveCountryWithPath(country: Country, path: any): void {
 
   }
-  getCountry(countryId: string): Observable<Country>{
-    return empty();
+  getCountry(countryId: string): Observable<Country> {
+    return of(new Country('', '', ''));
   }
 }
 

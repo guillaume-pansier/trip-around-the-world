@@ -22,12 +22,14 @@ export class CountryRepositoryService implements CountryRepository {
   };
 
 
-  getCountry(countryId:string): Observable<Country> {
+  getCountry(countryId: string): Observable<Country> {
 
     return this.loadCountries().map((countryArray) => {
 
       for (let country of countryArray) {
-        if(countryId === country.id) return country;
+        if(countryId === country.id) {
+          return country;
+        }
       }
 
       return undefined;
@@ -96,15 +98,15 @@ export class CountryRepositoryService implements CountryRepository {
   fetchRawSVGContries(): Observable<XMLDocument> {
 
     return this.http.get(this.config.get('svgUrl'))
-      .map((res:Response) => res.text())
-      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+      .map((res: Response) => res.text())
+      .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
   }
 
   fetchCountryCodes(): Observable<JSON> {
 
     return this.http.get(this.config.get('countryCodesUrl'))
-      .map((res:Response) => res.json())
-      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+      .map((res: Response) => res.json())
+      .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
   }
 
   saveCountry(country: Country): void {
