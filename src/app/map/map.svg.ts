@@ -1,4 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { DOCUMENT } from '@angular/platform-browser';
 import { Country } from './model/country.ts';
 import { STYLE_CLASS_NORMAL, STYLE_CLASS_HOVER } from './country.svg';
@@ -17,7 +18,8 @@ export class MapSVGComponent implements OnInit {
 
   private countriesObservable: Observable<Array<Country>>;
 
-  constructor(@Inject(DOCUMENT) private document, @Inject(CONTRY_REPO_TOKEN) private countryRepository: CountryRepository) {
+  constructor(@Inject(DOCUMENT) private document, @Inject(CONTRY_REPO_TOKEN) private countryRepository: CountryRepository,
+              private router: Router) {
 
   }
 
@@ -26,8 +28,7 @@ export class MapSVGComponent implements OnInit {
   }
 
   clickMe(country: Country) {
-    alert('Country ' + country.id + ' : ' + country.name + ' clicked');
-    console.log(this.document.getElementById(country.id));
+    this.router.navigate(['/country', country.id]);
   }
 
   onHoverCountry(country: Country) {

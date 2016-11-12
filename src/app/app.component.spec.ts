@@ -4,6 +4,7 @@ import { TestBed, async } from '@angular/core/testing';
 import { By }              from '@angular/platform-browser';
 import { Observable } from 'rxjs/Rx';
 import { from } from 'rxjs/observable/from';
+import { empty } from 'rxjs/observable/empty';
 
 import { AppComponent } from './app.component';
 import { MapSVGComponent } from './map/map.svg';
@@ -11,6 +12,7 @@ import { CountrySVGComponent } from './map/country.svg';
 import { CountryRepository } from './map/repository/country.repository';
 import { Country } from './map/model/country';
 import { CONTRY_REPO_TOKEN } from './map/repository/country.repository.constants';
+
 
 class CountryRepositoryMock implements CountryRepository {
   loadCountries(): Observable<Array<Country>> {
@@ -21,6 +23,9 @@ class CountryRepositoryMock implements CountryRepository {
   }
   saveCountryWithPath(country: Country, path: any): void {
 
+  }
+  getCountry(countryId: string): Observable<Country>{
+    return empty();
   }
 }
 
