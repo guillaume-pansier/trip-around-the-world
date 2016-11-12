@@ -1,9 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
-import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { AgmCoreModule, GoogleMapsAPIWrapper } from 'angular2-google-maps/core';
+import { AppRoutingModule } from './routing/app-routing-module';
 
 
 import { Config } from './config/config';
@@ -15,12 +15,6 @@ import { CONTRY_REPO_TOKEN } from "./map/repository/country.repository.constants
 import { CountryDetailComponent } from './country-detail/country-detail.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    MapSVGComponent,
-    CountrySVGComponent,
-    CountryDetailComponent
-  ],
   imports: [
     BrowserModule,
     FormsModule,
@@ -28,11 +22,13 @@ import { CountryDetailComponent } from './country-detail/country-detail.componen
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyCbfov46Hk19QUCjXheiaFNkYn3k0id6Jc'
     }),
-    RouterModule.forRoot([
-      { path: 'country/:id', component: CountryDetailComponent },
-      { path: '', component: MapSVGComponent }
-      /*{ path: '**', component: PageNotFoundComponent }*/
-    ])
+    AppRoutingModule
+  ],
+  declarations: [
+    AppComponent,
+    MapSVGComponent,
+    CountrySVGComponent,
+    CountryDetailComponent
   ],
   providers: [Config, {
     provide: APP_INITIALIZER,
