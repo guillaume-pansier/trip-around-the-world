@@ -79,7 +79,7 @@
 
 
   <a *ngFor="let country of (this.countriesObservable | async )">
-    <g id="{{country.id}}" [country]="country" (click)="clickMe(country)" (mouseover)="onHoverCountry(country)" (mouseleave)="onLeaveCountry(country)"/>
+    <g id="{{country.id}}" [country]="country" (click)="onClickCountry(country)" (mouseover)="onHoverCountry(country)" (mouseleave)="onLeaveCountry(country)"/>
   </a>
 
 </svg>

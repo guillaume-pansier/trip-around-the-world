@@ -26,7 +26,7 @@ export class MapSVGComponent implements OnInit {
     this.countriesObservable = this.countryRepository.loadCountries();
   }
 
-  clickMe(country: Country) {
+  onClickCountry(country: Country) {
     this.router.navigate(['/country', country.id]);
   }
 
