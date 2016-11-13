@@ -1,0 +1,9 @@
+.navigation-pannel{
+  width: auto;
+  height: 100vh;
+  text-align: center;
+  color: darkslategrey;
+  padding: 0 10px;
+  margin:0;
+  background-color: transparent;
+}
