@@ -6,7 +6,6 @@ import { STYLE_CLASS_NORMAL, STYLE_CLASS_HOVER } from './country.svg';
 import { CountryRepository } from './repository/country.repository';
 import { CONTRY_REPO_TOKEN } from './repository/country.repository.constants';
 import { Observable } from 'rxjs/Rx';
-/*import { ChangeDetectorRef } from '@angular/core';*/
 
 
 @Component({

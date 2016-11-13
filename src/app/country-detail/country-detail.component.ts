@@ -1,4 +1,5 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, SimpleChanges, AfterViewInit } from '@angular/core';
+import { DOCUMENT } from '@angular/platform-browser';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { AgmCoreModule, MapsAPILoader, GoogleMapsAPIWrapper, LatLngBounds  } from 'angular2-google-maps/core';
 
@@ -18,11 +19,11 @@ export class CountryDetailComponent implements OnInit {
   lng: number;
   bounds: LatLngBounds;
   country: Country;
+  zoomCanBeInitialized = false;
 
   constructor( private route: ActivatedRoute,
                private router: Router,
                private mapsAPILoader: MapsAPILoader,
-               private MapsAPILoaderWrapper: GoogleMapsAPIWrapper,
                @Inject(CONTRY_REPO_TOKEN) private countryRepository: CountryRepository) { }
 
   ngOnInit() {
@@ -33,14 +34,19 @@ export class CountryDetailComponent implements OnInit {
       });
     });
 
-    this.mapsAPILoader.load().then(() => {
+    let self = this;
+    this.mapsAPILoader.load().then(() =>
+    {
       let geocoder = new google.maps.Geocoder();
-      let self = this;
+
       geocoder.geocode( { 'address': this.country.name, 'language': 'en', 'region': this.country.id }, function(results, status) {
+
         if (status == google.maps.GeocoderStatus.OK) {
           self.lat = results[0].geometry.location.lat();
           self.lng = results[0].geometry.location.lng();
           self.bounds = results[0].geometry.viewport;
+          self.zoomCanBeInitialized = true;
+
         } else {
           alert("Could not find location: " + location);
         }

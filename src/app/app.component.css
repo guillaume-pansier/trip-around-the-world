@@ -3,6 +3,9 @@
   height: 300px;
 }
 */
-.truc {
-  width: 80%;
+.app-container {
+  width: auto;
+  height: auto;
+  margin: 0 auto;
+  display:inline;
 }

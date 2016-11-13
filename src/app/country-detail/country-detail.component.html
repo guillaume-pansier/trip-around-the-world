@@ -2,5 +2,6 @@
 <!-- the component as the initial center of the map: -->
 
 <sebm-google-map [latitude]="lat" [longitude]="lng" [fitBounds]="bounds">
+  <app-pan-controller [zoomCanBeInitialized]="zoomCanBeInitialized" [bounds]="bounds"></app-pan-controller>
   <sebm-google-map-marker [latitude]="lat" [longitude]="lng" [fitBounds]="bounds"></sebm-google-map-marker>
 </sebm-google-map>

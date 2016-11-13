@@ -13,6 +13,8 @@ import { CountrySVGComponent } from './map/country.svg'
 import { CountryRepositoryService } from "./map/repository/country.repository.service.ts";
 import { CONTRY_REPO_TOKEN } from "./map/repository/country.repository.constants";
 import { CountryDetailComponent } from './country-detail/country-detail.component';
+import { PanControllerComponent } from './country-detail/pan-controller/pan-controller.component';
+import { NaviguationPannelComponent } from './naviguation-pannel/naviguation-pannel.component';
 
 @NgModule({
   imports: [
@@ -28,7 +30,9 @@ import { CountryDetailComponent } from './country-detail/country-detail.componen
     AppComponent,
     MapSVGComponent,
     CountrySVGComponent,
-    CountryDetailComponent
+    CountryDetailComponent,
+    NaviguationPannelComponent,
+    PanControllerComponent
   ],
   providers: [Config, {
     provide: APP_INITIALIZER,
@@ -36,8 +40,7 @@ import { CountryDetailComponent } from './country-detail/country-detail.componen
     deps: [Config],
     multi: true
   },
-    {provide: CONTRY_REPO_TOKEN, useClass: CountryRepositoryService},
-    GoogleMapsAPIWrapper
+    {provide: CONTRY_REPO_TOKEN, useClass: CountryRepositoryService}
   ],
   bootstrap: [AppComponent ]
 })
