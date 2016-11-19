@@ -9,6 +9,12 @@ branches:
   only:
   - master
 
+notifications:
+  email:
+    recipients:
+      - guillaume.pansier@gmail.com
+      - anne.roets27@gmail.com
+
 before_install:
  - export CHROME_BIN=/usr/bin/google-chrome
  - export DISPLAY=:99.0
