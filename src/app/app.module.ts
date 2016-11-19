@@ -10,10 +10,11 @@ import { Config } from './config/config';
 import { AppComponent } from './app.component';
 import { MapSVGComponent } from './map/map.svg';
 import { CountrySVGComponent } from './map/country.svg'
-import { CountryRepositoryService } from "./map/repository/country.repository.service.ts";
+import { CountryRepositoryService } from "./map/repository/country.repository.service";
 import { CONTRY_REPO_TOKEN } from "./map/repository/country.repository.constants";
 import { CountryDetailComponent } from './country-detail/country-detail.component';
-import { PanControllerComponent } from './country-detail/pan-controller/pan-controller.component';
+import { PanControllerComponent } from './country-detail/boundaries-controller/boundaries-controller.component';
+import { OverlayFillerComponent } from './country-detail/overlay-filler/overlay-filler.component';
 import { NaviguationPannelComponent } from './naviguation-pannel/naviguation-pannel.component';
 
 @NgModule({
@@ -32,7 +33,8 @@ import { NaviguationPannelComponent } from './naviguation-pannel/naviguation-pan
     CountrySVGComponent,
     CountryDetailComponent,
     NaviguationPannelComponent,
-    PanControllerComponent
+    PanControllerComponent,
+    OverlayFillerComponent
   ],
   providers: [Config, {
     provide: APP_INITIALIZER,

@@ -5,7 +5,7 @@ import * as mapTypes from 'angular2-google-maps/core/services/google-maps-types'
 declare var google: any;
 
 @Directive({
-  selector: 'app-pan-controller'
+  selector: 'app-boundaries-controller'
 })
 export class PanControllerComponent implements OnInit,  OnChanges{
 
@@ -28,24 +28,14 @@ export class PanControllerComponent implements OnInit,  OnChanges{
         })
     });
 
-
-    /*
-    this.mapsAPILoaderWrapper.subscribeToMapEvent('click').subscribe(() =>
-    {
-      console.dir('CLIK');
-      console.dir(this.bounds);
-    });
-*/
-
-
   }
 
   ngOnChanges(changes: any): void {
     if(changes.zoomCanBeInitialized && changes.zoomCanBeInitialized.currentValue){
       this.mapsAPILoaderWrapper.getNativeMap().then((map : any) => {
-       let initialZoom = map.getZoom();
-       map.setOptions({'minZoom' : initialZoom});
-       });
+         let initialZoom = map.getZoom();
+         map.setOptions({'minZoom' : initialZoom});
+        });
     }
   }
 
