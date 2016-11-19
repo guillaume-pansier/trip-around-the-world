@@ -27,7 +27,7 @@ export class CountryRepositoryService implements CountryRepository {
     return this.loadCountries().map((countryArray) => {
 
       for (let country of countryArray) {
-        if(countryId === country.id) {
+        if (countryId === country.id) {
           return country;
         }
       }
