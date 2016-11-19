@@ -16,6 +16,7 @@ import { CountryDetailComponent } from './country-detail/country-detail.componen
 import { PanControllerComponent } from './country-detail/boundaries-controller/boundaries-controller.component';
 import { OverlayFillerComponent } from './country-detail/overlay-filler/overlay-filler.component';
 import { NaviguationPannelComponent } from './naviguation-pannel/naviguation-pannel.component';
+import { OverlayRepositoryService } from './country-detail/overlay-repository/overlay-repository.service';
 
 @NgModule({
   imports: [
@@ -42,9 +43,10 @@ import { NaviguationPannelComponent } from './naviguation-pannel/naviguation-pan
     deps: [Config],
     multi: true
   },
-    {provide: CONTRY_REPO_TOKEN, useClass: CountryRepositoryService}
+    {provide: CONTRY_REPO_TOKEN, useClass: CountryRepositoryService},
+    OverlayRepositoryService
   ],
-  bootstrap: [AppComponent ]
+  bootstrap: [AppComponent ] 
 })
 export class AppModule {
 }
