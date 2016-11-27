@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
-import { Observable } from 'rxjs/observable';
+import { Observable } from 'rxjs/Observable';
 import { from } from 'rxjs/observable/from';
 import { empty } from 'rxjs/observable/empty';
 import { Path } from './path';
