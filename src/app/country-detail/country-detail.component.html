@@ -2,7 +2,8 @@
 <!-- the component as the initial center of the map: -->
 
 <sebm-google-map [latitude]="lat" [longitude]="lng" [fitBounds]="bounds">
+  <app-event-handler [countryId]="country.id"></app-event-handler>
   <app-overlay-filler [countryId]="country.id"></app-overlay-filler>
   <app-boundaries-controller [zoomCanBeInitialized]="zoomCanBeInitialized" [bounds]="bounds"></app-boundaries-controller>
-  <sebm-google-map-marker [latitude]="lat" [longitude]="lng" [fitBounds]="bounds"></sebm-google-map-marker>
+ <!-- <sebm-google-map-marker [latitude]="lat" [longitude]="lng" [fitBounds]="bounds"></sebm-google-map-marker>-->
 </sebm-google-map>

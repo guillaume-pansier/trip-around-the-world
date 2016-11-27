@@ -17,9 +17,7 @@ export class OverlayRepositoryService {
       return of(this.overlays[countryId]);
     }
 
-    console.dir(this.overlaysObs);
     return this.overlaysObs.map((jsonFeatures) => {
-      console.dir(jsonFeatures[countryId]);
       return jsonFeatures[countryId];
     });
   }
@@ -28,13 +26,11 @@ export class OverlayRepositoryService {
     this.overlaysObs = this.http.get('assets/countryFeatures.json')
       .map((res: Response) => res.json());
 
-    console.dir(this.overlaysObs);
-
     this.overlaysObs.subscribe((jsonFeatures) => {
       this.overlays = jsonFeatures;
     },
       (error) => {
-        console.error('could not retrieve overlays')
+        console.error('could not retrieve overlays');
       });
   }
 

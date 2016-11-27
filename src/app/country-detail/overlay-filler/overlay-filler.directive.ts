@@ -1,7 +1,6 @@
 import { Directive, OnInit, Input, OnChanges } from '@angular/core';
-import { Http, Response } from '@angular/http';
-import { AgmCoreModule, GoogleMapsAPIWrapper, LatLng, LatLngBounds } from 'angular2-google-maps/core';
-import * as mapTypes from 'angular2-google-maps/core/services/google-maps-types';
+import { Http } from '@angular/http';
+import { GoogleMapsAPIWrapper } from 'angular2-google-maps/core';
 import { OverlayRepositoryService } from '../overlay-repository/overlay-repository.service'
 
 declare var google: any;
@@ -17,7 +16,7 @@ const worldLayer = `[[-180, -85],
 @Directive({
   selector: 'app-overlay-filler'
 })
-export class OverlayFillerComponent implements OnInit, OnChanges {
+export class OverlayFillerDirective implements OnInit, OnChanges {
 
 
 
@@ -37,16 +36,19 @@ export class OverlayFillerComponent implements OnInit, OnChanges {
         }
         this.mapsAPILoaderWrapper.getNativeMap().then(
           map => {
-
             let data_layer = new google.maps.Data({ map: map });
-            data_layer.setStyle({ //using set style we can set styles for all boundaries at once
+            data_layer.setStyle({ // using set style we can set styles for all boundaries at once
               fillColor: 'white',
               strokeWeight: 0.1,
               fillOpacity: 0.7
             });
 
             let layer = '[' + worldLayer + ',' + countryLayer + ']';
-            let geoJson = { "type": "Feature", "id": "AFG", "properties": { "name": "Afghanistan" }, "geometry": { "type": "Polygon", "coordinates": JSON.parse(layer) } };
+            let geoJson = {
+              'type': 'Feature',
+              'id': this.countryId,
+              'properties': { 'name': this.countryId }, 'geometry': { 'type': 'Polygon', 'coordinates': JSON.parse(layer) }
+            };
             data_layer.addGeoJson(geoJson);
 
           }

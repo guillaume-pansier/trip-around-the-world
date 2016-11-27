@@ -1,11 +1,10 @@
-import { Component, OnInit, Inject, SimpleChanges, AfterViewInit } from '@angular/core';
-import { DOCUMENT } from '@angular/platform-browser';
+import { Component, OnInit, Inject } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { AgmCoreModule, MapsAPILoader, GoogleMapsAPIWrapper, LatLngBounds  } from 'angular2-google-maps/core';
+import { MapsAPILoader, LatLngBounds  } from 'angular2-google-maps/core';
 
 import { CONTRY_REPO_TOKEN } from '../map/repository/country.repository.constants';
 import { CountryRepository } from '../map/repository/country.repository';
-import { Country } from '../map/model/country.ts';
+import { Country } from '../map/model/country';
 
 declare var google: any;
 
@@ -41,14 +40,14 @@ export class CountryDetailComponent implements OnInit {
 
       geocoder.geocode( { 'address': this.country.name, 'language': 'en', 'region': this.country.id }, function(results, status) {
 
-        if (status == google.maps.GeocoderStatus.OK) {
+        if (status === google.maps.GeocoderStatus.OK) {
           self.lat = results[0].geometry.location.lat();
           self.lng = results[0].geometry.location.lng();
           self.bounds = results[0].geometry.viewport;
           self.zoomCanBeInitialized = true;
 
         } else {
-          alert("Could not find location: " + location);
+          alert('Could not find location: ' + location);
         }
       });
     });
