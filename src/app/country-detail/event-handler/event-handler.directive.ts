@@ -38,7 +38,7 @@ export class EventHandlerDirective implements AfterContentInit {
     );
 
     this.googleMapsAPIWrapper.subscribeToMapEvent('dblclick')
-      .subscribe((event) => {
+      .subscribe((event: any) => {
         this.savePathAndAddMarker(event.latLng);
       },
       (error) => {

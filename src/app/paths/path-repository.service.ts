@@ -20,16 +20,12 @@ export class PathRepositoryService {
     return this.http.get('http://192.168.99.100:49160/paths', { headers: this.headers })
       .map((response: Response) => response.json())
       .flatMap(paths => {
-        let pathArray: Array<Path> = [];
-        for (let path of paths) {
-          pathArray.push(path);
-        }
 
         if (paths.length === 0) {
           return empty();
         }
 
-        return from(pathArray);
+        return from(paths);
       });
   }
 
