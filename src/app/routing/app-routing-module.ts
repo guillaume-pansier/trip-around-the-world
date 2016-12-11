@@ -8,8 +8,8 @@ import { NaviguationPannelComponent } from '../naviguation-pannel/naviguation-pa
 @NgModule({
   imports: [
     RouterModule.forRoot([
-      { path: '', outlet: 'test-name', component: NaviguationPannelComponent },
-      { path: 'country/:id', outlet: 'test-name', component: NaviguationPannelComponent },
+      { path: '', outlet: 'nav-section', component: NaviguationPannelComponent },
+      { path: 'country/:id', outlet: 'nav-section', component: NaviguationPannelComponent },
       { path: 'country/:id', component: CountryDetailComponent },
       { path: '', component: MapSVGComponent }
     ])

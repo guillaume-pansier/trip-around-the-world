@@ -31,7 +31,6 @@ export class MapSVGComponent implements OnInit {
 
   onClickCountry(country: Country) {
     this.stateHandler.countryClicked(country);
-   // this.router.navigateByUrl('/country/' + country.id + '(test-name:country/' + country.id + ')');
   }
 
   onHoverCountry(country: Country) {

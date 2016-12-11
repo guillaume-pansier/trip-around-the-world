@@ -10,6 +10,6 @@ export class DefaultApplicationStateHandlerService implements ApplicationStateHa
   constructor(private router: Router) { }
 
   countryClicked(country: Country) {
-        this.router.navigateByUrl('/country/' + country.id + '(test-name:country/' + country.id + ')');
+        this.router.navigateByUrl('/country/' + country.id + '(nav-section:country/' + country.id + ')');
   }
 }
