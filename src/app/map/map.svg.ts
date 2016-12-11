@@ -1,11 +1,13 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DOCUMENT } from '@angular/platform-browser';
-import { Country } from './model/country.ts';
+import { Country } from '../model/country/country';
 import { STYLE_CLASS_NORMAL, STYLE_CLASS_HOVER } from './country.svg';
 import { CountryRepository } from './repository/country.repository';
 import { CONTRY_REPO_TOKEN } from './repository/country.repository.constants';
 import { Observable } from 'rxjs/Rx';
+import { STATE_HANDLER_TOKEN } from '../constants';
+import { ApplicationStateHandler } from '../application-state/application-state-handler';
 
 
 @Component({
@@ -18,7 +20,8 @@ export class MapSVGComponent implements OnInit {
   private countriesObservable: Observable<Array<Country>>;
 
   constructor(@Inject(DOCUMENT) private document, @Inject(CONTRY_REPO_TOKEN) private countryRepository: CountryRepository,
-              private router: Router) {
+              private router: Router,
+              @Inject(STATE_HANDLER_TOKEN) private stateHandler: ApplicationStateHandler) {
 
   }
 
@@ -27,14 +30,15 @@ export class MapSVGComponent implements OnInit {
   }
 
   onClickCountry(country: Country) {
-    this.router.navigate(['/country', country.id]);
+    this.stateHandler.countryClicked(country);
+   // this.router.navigateByUrl('/country/' + country.id + '(test-name:country/' + country.id + ')');
   }
 
   onHoverCountry(country: Country) {
     this.changeCountryStyle(country.id, STYLE_CLASS_NORMAL, STYLE_CLASS_HOVER);
   }
 
-  onLeaveCountry(country: Country) {
+  onLeaveCountry(country: Country)  {
     this.changeCountryStyle(country.id, STYLE_CLASS_HOVER, STYLE_CLASS_NORMAL);
   }
 

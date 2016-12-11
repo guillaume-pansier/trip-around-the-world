@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { AgmCoreModule } from 'angular2-google-maps/core';
 import { AppRoutingModule } from './routing/app-routing-module';
+import { ApplicationStateModule } from './application-state/application-state-module';
 
 
 import { Config } from './config/config';
@@ -11,7 +12,6 @@ import { AppComponent } from './app.component';
 import { MapSVGComponent } from './map/map.svg';
 import { CountrySVGComponent } from './map/country.svg';
 import { CountryRepositoryService } from './map/repository/country.repository.service';
-import { CONTRY_REPO_TOKEN } from './map/repository/country.repository.constants';
 import { CountryDetailComponent } from './country-detail/country-detail.component';
 import { PanControllerComponent } from './country-detail/boundaries-controller/boundaries-controller.component';
 import { OverlayFillerDirective } from './country-detail/overlay-filler/overlay-filler.directive';
@@ -19,6 +19,11 @@ import { NaviguationPannelComponent } from './naviguation-pannel/naviguation-pan
 import { OverlayRepositoryService } from './country-detail/overlay-repository/overlay-repository.service';
 import { EventHandlerDirective } from './country-detail/event-handler/event-handler.directive';
 import { PathRepositoryService } from './paths/path-repository.service';
+
+
+import { CONTRY_REPO_TOKEN } from './map/repository/country.repository.constants';
+
+
 
 @NgModule({
   imports: [
@@ -28,7 +33,8 @@ import { PathRepositoryService } from './paths/path-repository.service';
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyCbfov46Hk19QUCjXheiaFNkYn3k0id6Jc'
     }),
-    AppRoutingModule
+    AppRoutingModule,
+    ApplicationStateModule
   ],
   declarations: [
     AppComponent,

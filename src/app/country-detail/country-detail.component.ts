@@ -4,7 +4,7 @@ import { MapsAPILoader, LatLngBounds  } from 'angular2-google-maps/core';
 
 import { CONTRY_REPO_TOKEN } from '../map/repository/country.repository.constants';
 import { CountryRepository } from '../map/repository/country.repository';
-import { Country } from '../map/model/country';
+import { Country } from '../model/country/country';
 
 declare var google: any;
 

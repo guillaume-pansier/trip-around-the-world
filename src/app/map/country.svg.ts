@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { Country } from './model/country';
+import { Country } from '../model/country/country';
 
 
 export const STYLE_CLASS_NORMAL = 'landxx';

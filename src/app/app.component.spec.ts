@@ -11,7 +11,7 @@ import { AppComponent } from './app.component';
 import { MapSVGComponent } from './map/map.svg';
 import { CountrySVGComponent } from './map/country.svg';
 import { CountryRepository } from './map/repository/country.repository';
-import { Country } from './map/model/country';
+import { Country } from './model/country/country';
 import { CONTRY_REPO_TOKEN } from './map/repository/country.repository.constants';
 
 

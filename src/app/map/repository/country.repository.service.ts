@@ -9,7 +9,7 @@ import { zip } from 'rxjs/observable/zip';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
-import { Country } from '../model/country';
+import { Country } from '../../model/country/country';
 import { Config } from '../../config/config';
 
 @Injectable()

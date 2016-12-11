@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs/Rx';
-import { Country } from '../model/country';
+import { Country } from '../../model/country/country';
 
 export interface CountryRepository {
   loadCountries(): Observable<Array<Country>>;
