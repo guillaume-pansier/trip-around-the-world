@@ -2,8 +2,8 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { MapsAPILoader, LatLngBounds  } from 'angular2-google-maps/core';
 
-import { CONTRY_REPO_TOKEN } from '../map/repository/country.repository.constants';
-import { CountryRepository } from '../map/repository/country.repository';
+import { CONTRY_REPO_TOKEN } from '../model/country/country.repository.constants';
+import { CountryRepository } from '../model/country/country.repository';
 import { Country } from '../model/country/country';
 
 declare var google: any;

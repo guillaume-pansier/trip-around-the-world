@@ -1,8 +1,8 @@
 import { Directive, OnInit, Input, AfterContentInit } from '@angular/core';
 import { GoogleMapsAPIWrapper } from 'angular2-google-maps/core';
-import { PathRepositoryService } from '../../paths/path-repository.service';
-import { Path } from '../../paths/path';
-import { CountryPath } from '../../paths/country-path';
+import { PathRepositoryService } from '../../model/paths/path-repository.service';
+import { Path } from '../../model/paths/path';
+import { CountryPath } from '../../model/paths/country-path';
 
 
 @Directive({

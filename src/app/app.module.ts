@@ -11,17 +11,17 @@ import { Config } from './config/config';
 import { AppComponent } from './app.component';
 import { MapSVGComponent } from './map/map.svg';
 import { CountrySVGComponent } from './map/country.svg';
-import { CountryRepositoryService } from './map/repository/country.repository.service';
+import { CountryRepositoryService } from './model/country/country.repository.service';
 import { CountryDetailComponent } from './country-detail/country-detail.component';
 import { PanControllerComponent } from './country-detail/boundaries-controller/boundaries-controller.component';
 import { OverlayFillerDirective } from './country-detail/overlay-filler/overlay-filler.directive';
 import { NaviguationPannelComponent } from './naviguation-pannel/naviguation-pannel.component';
 import { OverlayRepositoryService } from './country-detail/overlay-repository/overlay-repository.service';
 import { EventHandlerDirective } from './country-detail/event-handler/event-handler.directive';
-import { PathRepositoryService } from './paths/path-repository.service';
+import { PathRepositoryService } from './model/paths/path-repository.service';
 
 
-import { CONTRY_REPO_TOKEN } from './map/repository/country.repository.constants';
+import { CONTRY_REPO_TOKEN } from './model/country/country.repository.constants';
 
 
 

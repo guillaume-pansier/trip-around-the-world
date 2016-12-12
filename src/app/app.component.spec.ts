@@ -10,9 +10,9 @@ import { empty } from 'rxjs/observable/empty';
 import { AppComponent } from './app.component';
 import { MapSVGComponent } from './map/map.svg';
 import { CountrySVGComponent } from './map/country.svg';
-import { CountryRepository } from './map/repository/country.repository';
+import { CountryRepository } from './model/country/country.repository';
 import { Country } from './model/country/country';
-import { CONTRY_REPO_TOKEN } from './map/repository/country.repository.constants';
+import { CONTRY_REPO_TOKEN } from './model/country/country.repository.constants';
 
 
 class CountryRepositoryMock implements CountryRepository {
