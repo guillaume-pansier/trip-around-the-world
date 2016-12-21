@@ -1,5 +1,7 @@
 .map-svg {
-  float: left;
+  vertical-align: top;
+  display:inline-block;
+  white-space: normal;
   width: 80vw;
   height: auto;
   border-right: solid gainsboro thin;

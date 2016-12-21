@@ -1,11 +1,6 @@
-/*
-.sebm-google-map-container {
-  height: 300px;
-}
-*/
 .app-container {
   width: auto;
   height: auto;
   margin: 0 auto;
-  display:inline;
+  white-space: nowrap;
 }

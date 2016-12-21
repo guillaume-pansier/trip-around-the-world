@@ -1,5 +1,7 @@
 .sebm-google-map-container {
-  float:left;
+  vertical-align: top;
+  display:inline-block;
+  white-space: normal;
   margin:0;
   padding: 0;
   height: 100vh;

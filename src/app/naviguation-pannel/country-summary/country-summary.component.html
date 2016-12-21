@@ -1,7 +1,10 @@
-<p>
-  country-summary works!
-</p>
-
-<ul>
-    <li *ngFor="let interestPoint of ( this.interestPoints | async )">{{interestPoint.name}}</li>
-</ul>
+<div class = "country-summary">
+  <h3>Interest Points</h3>
+  <div class="table-responsive">
+    <table class="table table-hover">
+        <tbody>
+        <tr *ngFor="let interestPoint of ( this.interestPoints | async )"><th>{{interestPoint.name}}</th></tr>
+        </tbody>
+    </table>
+  </div>
+</div>
