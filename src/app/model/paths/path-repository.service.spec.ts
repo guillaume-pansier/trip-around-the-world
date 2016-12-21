@@ -50,7 +50,10 @@ describe('Service: PathRepository', () => {
 
       mockBackend.connections.subscribe(c => {
         c.mockRespond(new Response(new ResponseOptions({
-          body: [{ '_id': '_id', countries: [{ countryid: 'countryid', 'coordinates': 'coordinates' }] }]
+          body: [{
+            '_id': '_id', countries: [
+              { countryid: 'countryid', interestPoints: [{ name: 'name', coordinates: 'coordinates' }] }]
+          }]
         })));
 
       });
@@ -59,7 +62,9 @@ describe('Service: PathRepository', () => {
         .subscribe((path) => {
           expect(path._id).toBe('_id');
           expect(path.countries.length).toBe(1);
-          expect(path.countries[0].coordinates).toBe('coordinates');
+          expect(path.countries[0].interestPoints.length).toBe(1);
+          expect(path.countries[0].interestPoints[0].coordinates).toBe('coordinates');
+          expect(path.countries[0].interestPoints[0].name).toBe('name');
           expect(path.countries[0].countryid).toBe('countryid');
         });
 
@@ -75,8 +80,12 @@ describe('Service: PathRepository', () => {
       mockBackend.connections.subscribe(c => {
         c.mockRespond(new Response(new ResponseOptions({
           body: [
-            { '_id': '_id', countries: [{ countryid: 'countryid', 'coordinates': 'coordinates' }] },
-            { '_id': '_id2', countries: [{ countryid: 'countryid2', 'coordinates': 'coordinates2' }] }
+            { '_id': '_id', countries: [
+              { countryid: 'countryid', 'interestPoints': [ { name: 'name1', coordinates: 'coordinates' }] }
+              ] },
+            { '_id': '_id2', countries: [
+              { countryid: 'countryid2', 'interestPoints': [ { name: 'name2', coordinates: 'coordinates2' }] }
+              ] }
           ]
         })));
 
@@ -86,11 +95,13 @@ describe('Service: PathRepository', () => {
         .subscribe((path) => {
           expect(path._id).toMatch('_id.*');
           expect(path.countries.length).toBe(1);
-          expect(path.countries[0].coordinates).toMatch('coordinates.*');
+          expect(path.countries[0].interestPoints.length).toBe(1);
+          expect(path.countries[0].interestPoints[0].coordinates).toMatch('coordinates.*');
+          expect(path.countries[0].interestPoints[0].name).toMatch('name.*');
           expect(path.countries[0].countryid).toMatch('countryid.*');
         });
 
-     service.getPaths().count().subscribe(
+      service.getPaths().count().subscribe(
         count => expect(count).toBe(2)
       );
 

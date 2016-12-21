@@ -1,4 +1,6 @@
+import { InterestPoint } from './interest-point';
+
 export class CountryPath {
 
-    constructor(public countryid: string, public coordinates: Array<string>) { };
+    constructor(public countryid: string, public interestPoints: Array<InterestPoint>) { };
 }

@@ -1,0 +1,7 @@
+<p>
+  country-summary works!
+</p>
+
+<ul>
+    <li *ngFor="let interestPoint of ( this.interestPoints | async )">{{interestPoint.name}}</li>
+</ul>

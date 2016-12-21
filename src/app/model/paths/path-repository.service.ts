@@ -19,10 +19,10 @@ export class PathRepositoryService {
   public getPaths(): Observable<Path> {
     return this.http.get('http://192.168.99.100:49160/paths', { headers: this.headers })
       .map((response: Response) => response.json())
-      .flatMap(paths => {
+      .flatMap((paths: Array<Path>) => {
 
         if (paths.length === 0) {
-          return empty();
+          return empty<Path>();
         }
 
         return from(paths);
@@ -30,7 +30,8 @@ export class PathRepositoryService {
   }
 
   public savePath(path: Path): Observable<Path> {
-    if (path.countries && path.countries.length === 1 && path.countries[0].coordinates.length === 1) {
+
+    if (path.countries && path.countries.length === 1 && path.countries[0].interestPoints.length === 1) {
       return this.http.post('http://192.168.99.100:49160/path', path, { headers: this.headers })
         .map((response: Response) => response.json());
     } else {

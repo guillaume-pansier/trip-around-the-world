@@ -1,10 +1,11 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
-import { MapsAPILoader, LatLngBounds  } from 'angular2-google-maps/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { MapsAPILoader, LatLngBounds } from 'angular2-google-maps/core';
 
-import { CONTRY_REPO_TOKEN } from '../model/country/country.repository.constants';
-import { CountryRepository } from '../model/country/country.repository';
 import { Country } from '../model/country/country';
+
+import { STATE_HANDLER_TOKEN } from '../constants';
+import { ApplicationStateHandler } from '../application-state/application-state-handler';
 
 declare var google: any;
 
@@ -20,25 +21,21 @@ export class CountryDetailComponent implements OnInit {
   country: Country;
   zoomCanBeInitialized = false;
 
-  constructor( private route: ActivatedRoute,
-               private router: Router,
-               private mapsAPILoader: MapsAPILoader,
-               @Inject(CONTRY_REPO_TOKEN) private countryRepository: CountryRepository) { }
+  constructor(private route: ActivatedRoute,
+    private router: Router,
+    private mapsAPILoader: MapsAPILoader,
+    @Inject(STATE_HANDLER_TOKEN) private stateHandler: ApplicationStateHandler) { }
 
   ngOnInit() {
-    this.route.params.forEach((params: Params) => {
-      let id = params['id'];
-      this.countryRepository.getCountry(id).subscribe((country: Country) =>{
-        this.country = country;
-      });
-    });
+    this.stateHandler.onCountryClicked()
+      .subscribe((country: Country) => this.country = country);
+
 
     let self = this;
-    this.mapsAPILoader.load().then(() =>
-    {
+    this.mapsAPILoader.load().then(() => {
       let geocoder = new google.maps.Geocoder();
 
-      geocoder.geocode( { 'address': this.country.name, 'language': 'en', 'region': this.country.id }, function(results, status) {
+      geocoder.geocode({ 'address': this.country.name, 'language': 'en', 'region': this.country.id }, function (results, status) {
 
         if (status === google.maps.GeocoderStatus.OK) {
           self.lat = results[0].geometry.location.lat();

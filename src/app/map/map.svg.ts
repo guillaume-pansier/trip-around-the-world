@@ -30,7 +30,7 @@ export class MapSVGComponent implements OnInit {
   }
 
   onClickCountry(country: Country) {
-    this.stateHandler.countryClicked(country);
+    this.stateHandler.clicCountry(country);
   }
 
   onHoverCountry(country: Country) {

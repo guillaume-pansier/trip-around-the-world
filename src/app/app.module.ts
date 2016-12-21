@@ -22,6 +22,7 @@ import { PathRepositoryService } from './model/paths/path-repository.service';
 
 
 import { CONTRY_REPO_TOKEN } from './model/country/country.repository.constants';
+import { CountrySummaryComponent } from './naviguation-pannel/country-summary/country-summary.component';
 
 
 
@@ -44,7 +45,8 @@ import { CONTRY_REPO_TOKEN } from './model/country/country.repository.constants'
     NaviguationPannelComponent,
     PanControllerComponent,
     OverlayFillerDirective,
-    EventHandlerDirective
+    EventHandlerDirective,
+    CountrySummaryComponent
   ],
   providers: [Config, {
     provide: APP_INITIALIZER,
