@@ -26,6 +26,7 @@ export class DefaultApplicationStateHandlerService implements ApplicationStateHa
   clicCountry(country: Country): void {
     this.countryEventChannel.next(country);
 
+
     this.pathRepositoryService.getPaths()
       .defaultIfEmpty(new Path([new CountryPath(country.id, [])]))
       .subscribe((path: Path) => {

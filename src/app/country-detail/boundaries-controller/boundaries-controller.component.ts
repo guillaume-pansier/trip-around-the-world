@@ -16,16 +16,6 @@ export class PanControllerComponent implements OnInit, OnChanges {
   constructor(private mapsAPILoaderWrapper: GoogleMapsAPIWrapper) { }
 
   ngOnInit() {
-    this.mapsAPILoaderWrapper.subscribeToMapEvent('center_changed').subscribe(() => {
-      this.mapsAPILoaderWrapper.getCenter()
-        .then((center) => {
-          if (this.bounds.contains(center)) {
-            this.lastValidCenter = center;
-          } else {
-            this.mapsAPILoaderWrapper.panTo(this.lastValidCenter);
-          }
-        })
-    });
 
   }
 
@@ -35,6 +25,20 @@ export class PanControllerComponent implements OnInit, OnChanges {
         let initialZoom = map.getZoom();
         map.setOptions({ 'minZoom': initialZoom });
       });
+    }
+
+    if (changes.bounds && changes.bounds.currentValue) {
+      this.mapsAPILoaderWrapper.subscribeToMapEvent('center_changed').subscribe(() => {
+        this.mapsAPILoaderWrapper.getCenter()
+          .then((center) => {
+            if (this.bounds.contains(center)) {
+              this.lastValidCenter = center;
+            } else {
+              this.mapsAPILoaderWrapper.panTo(this.lastValidCenter);
+            }
+          })
+      });
+
     }
   }
 

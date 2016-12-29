@@ -21,8 +21,6 @@ const GMAPS_ADRS_TPE = ['point_of_interest',
 })
 export class EventHandlerDirective implements AfterContentInit {
 
-  @Input() private countryId: string;
-
   private path: CountryPath;
 
 
