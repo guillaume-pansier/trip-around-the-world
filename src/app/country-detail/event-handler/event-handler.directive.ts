@@ -10,6 +10,12 @@ import { ApplicationStateHandler } from '../../application-state/application-sta
 
 declare var google: any;
 
+const GMAPS_ADRS_TPE = ['point_of_interest',
+    'neighborhood',
+    'colloquial_area',
+    'administrative_area_level_2',
+    'administrative_area_level_1'];
+
 @Directive({
   selector: 'app-event-handler'
 })
@@ -107,9 +113,14 @@ export class EventHandlerDirective implements AfterContentInit {
     }
   }
 
+
   private findCorrectAddress(results: any) {
-    for (let type of ['point_of_interest', 'neighborhood', 'colloquial_area', 'administrative_area_level_1']) {
-      let address = results.find(this.isInterestPointResult.bind(this)(type));
+    for (let type of GMAPS_ADRS_TPE) {
+      let address = results.find(this.isInterestPointAddressOfType.bind(this)(type));
+      if (!address) {
+        address = results.find(this.isInterestPointResult.bind(this)(type));
+      }
+
       if (address) {
         return address.address_components.find(this.isInterestPointAddressOfType.bind(this)(type));
       }
