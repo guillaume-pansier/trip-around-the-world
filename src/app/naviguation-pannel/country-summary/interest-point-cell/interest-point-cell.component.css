@@ -1,0 +1,28 @@
+.interestPoint {
+    text-align: center;
+    border: none;
+    margin: 0;
+    width: 100%;
+}
+
+.interestPoint[disabled] {
+    background-color: inherit;
+}
+
+.interestPointEdit {
+    width: 20px;
+    margin: 5px;
+    cursor: pointer;
+    float: left;
+}
+
+.interestPointContainer {
+    width: auto;
+    overflow: hidden; 
+}
+
+.remainingWidth { 
+    display: block;
+    overflow: hidden;
+    padding-right:5px;
+}

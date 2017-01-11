@@ -1,8 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { InterestPoint } from '../../model/paths/interest-point';
-import { Observable } from 'rxjs/Rx';
 import { STATE_HANDLER_TOKEN } from '../../constants';
 import { ApplicationStateHandler } from '../../application-state/application-state-handler';
+import { CountryPath } from '../../model/paths/country-path';
 
 @Component({
   selector: 'app-country-summary',
@@ -11,14 +11,26 @@ import { ApplicationStateHandler } from '../../application-state/application-sta
 })
 export class CountrySummaryComponent implements OnInit {
 
-  private interestPoints: Observable<Array<InterestPoint>>;
+  private countryPath: CountryPath;
 
   constructor( @Inject(STATE_HANDLER_TOKEN) private applicationStateHandler: ApplicationStateHandler) { }
 
   ngOnInit() {
-    this.interestPoints = this.applicationStateHandler.onCountryPathModified().map(
-      countryPath => countryPath.interestPoints
+    this.applicationStateHandler.onCountryPathModified().subscribe(
+      countryPath => {
+        this.countryPath = countryPath;
+      }
     );
+  }
+
+  onCountryPathChange(interestPoints: Array<InterestPoint>) {
+    this.countryPath.interestPoints = interestPoints;
+    this.applicationStateHandler.modifyCountryPath(this.countryPath)
+    .subscribe(() => {},
+    (error) => {
+      console.error(error);
+      alert('Your modification could not be saved. Please retry later.');
+    });
   }
 
 }

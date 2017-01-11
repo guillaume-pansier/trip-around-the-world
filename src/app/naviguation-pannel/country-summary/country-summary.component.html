@@ -1,10 +1,15 @@
-<div class = "country-summary">
+<div class="country-summary">
   <h3>Interest Points</h3>
   <div class="table-responsive">
     <table class="table table-hover">
-        <tbody>
-        <tr *ngFor="let interestPoint of ( this.interestPoints | async )"><th>{{interestPoint.name}}</th></tr>
-        </tbody>
+      <tbody>
+        <tr *ngFor="let interestPoint of this.countryPath?.interestPoints; let i = index;">
+          <th class="nopadding">
+            <app-interest-point-cell [index]="i" [interestPoints]="this.countryPath?.interestPoints" (interestPointNameChange)="onCountryPathChange($event)">
+            </app-interest-point-cell>
+          </th>
+        </tr>
+      </tbody>
     </table>
   </div>
 </div>

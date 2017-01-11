@@ -23,6 +23,8 @@ import { PathRepositoryService } from './model/paths/path-repository.service';
 
 import { CONTRY_REPO_TOKEN } from './model/country/country.repository.constants';
 import { CountrySummaryComponent } from './naviguation-pannel/country-summary/country-summary.component';
+import { InterestPointCellComponent } from './naviguation-pannel/country-summary/interest-point-cell/interest-point-cell.component';
+import { FocusDirective } from './naviguation-pannel/country-summary/interest-point-cell/focus.directive';
 
 
 
@@ -46,7 +48,9 @@ import { CountrySummaryComponent } from './naviguation-pannel/country-summary/co
     PanControllerComponent,
     OverlayFillerDirective,
     EventHandlerDirective,
-    CountrySummaryComponent
+    CountrySummaryComponent,
+    InterestPointCellComponent,
+    FocusDirective
   ],
   providers: [Config, {
     provide: APP_INITIALIZER,

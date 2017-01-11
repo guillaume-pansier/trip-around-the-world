@@ -3,6 +3,10 @@
     margin: 0;
     vertical-align: top;
     width: 20vw;
-    display:inline-block;
+    display: inline-block;
     white-space: normal;
+}
+
+.nopadding {
+    padding: 0;
 }
