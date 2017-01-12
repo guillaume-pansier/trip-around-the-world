@@ -11,10 +11,10 @@ import { ApplicationStateHandler } from '../../application-state/application-sta
 declare var google: any;
 
 const GMAPS_ADRS_TPE = ['point_of_interest',
-    'neighborhood',
-    'colloquial_area',
-    'administrative_area_level_2',
-    'administrative_area_level_1'];
+  'neighborhood',
+  'colloquial_area',
+  'administrative_area_level_2',
+  'administrative_area_level_1'];
 
 @Directive({
   selector: 'app-event-handler'
@@ -32,7 +32,10 @@ export class EventHandlerDirective implements AfterContentInit {
     this.initPath().take(1).subscribe(
       () => { this.populateMarkers(this.path); },
       error => alert('cannot retrieve paths.' + error),
-      () => this.populateMarkers(this.path)
+      () => {
+        this.populateMarkers(this.path);
+        this.connectMarkers();
+      }
     );
 
 
@@ -69,6 +72,15 @@ export class EventHandlerDirective implements AfterContentInit {
     for (let pathPoint of countryPath.interestPoints) {
       this.googleMapsAPIWrapper.createMarker({ position: JSON.parse(pathPoint.coordinates) });
     }
+  }
+
+  private connectMarkers() {
+    for (let index = 0; index < this.path.interestPoints.length - 1; index++) {
+          this.googleMapsAPIWrapper.createPolyline({
+            path: [JSON.parse(this.path.interestPoints[index].coordinates), JSON.parse(this.path.interestPoints[index + 1].coordinates)]
+          });
+        }
+
   }
 
   private savePathAndAddMarker(position: any) {
