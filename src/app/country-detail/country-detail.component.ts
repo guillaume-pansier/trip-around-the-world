@@ -32,13 +32,14 @@ export class CountryDetailComponent implements OnInit {
     let self = this;
 
     this.stateHandler.onCountryClicked()
+      .find(country => country != null)
       .subscribe((country: Country) => {
         this.country = country;
 
         self.mapsAPILoader.load().then(() => {
           let geocoder = new google.maps.Geocoder();
 
-          geocoder.geocode({ 'address': this.country.name, 'language': 'en', 'region': this.country.id }, function (results, status) {
+          geocoder.geocode({ 'address': self.country.name, 'language': 'en', 'region': self.country.id }, function (results, status) {
 
             if (status === google.maps.GeocoderStatus.OK) {
               self.lat = results[0].geometry.location.lat();
@@ -47,7 +48,7 @@ export class CountryDetailComponent implements OnInit {
               self.zoomCanBeInitialized = true;
 
             } else {
-              alert('Could not find location: ' + location);
+              alert('Could not find location: ' + self.country.name);
             }
           });
         });
