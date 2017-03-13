@@ -5,7 +5,7 @@
       <tbody>
         <tr *ngFor="let interestPoint of this.countryPath?.interestPoints; let i = index;">
           <th class="nopadding">
-            <app-interest-point-cell [index]="i" [interestPoints]="this.countryPath?.interestPoints" (interestPointNameChange)="onCountryPathChange($event)">
+            <app-interest-point-cell [index]="i" [interestPoints]="this.countryPath?.interestPoints" (interestPointChange)="onCountryPathChange($event)">
             </app-interest-point-cell>
           </th>
         </tr>

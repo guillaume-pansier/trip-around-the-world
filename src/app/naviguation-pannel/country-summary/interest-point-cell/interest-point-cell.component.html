@@ -1,5 +1,6 @@
 <div class="interestPointContainer">
   <img (click)="edit()" src="assets/edit-new-icon-22.png" class="interestPointEdit"/>
+  <img (click)="delete(index)" src="assets/delete1.ico" class="interestPointEdit"/>
   <span class="remainingWidth">
     <input #input class="interestPoint" (keyup.enter)="save(input.value)" (blur)="save(input.value)" [(ngModel)]="interestPoints[index].name" [disabled]="disabled" appFocus/>
   </span>

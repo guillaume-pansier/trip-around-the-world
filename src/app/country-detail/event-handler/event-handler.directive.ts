@@ -1,9 +1,9 @@
-import { Directive, Inject, Input, AfterContentInit } from '@angular/core';
-import { GoogleMapsAPIWrapper } from 'angular2-google-maps/core';
+import { Directive, Inject, AfterContentInit } from '@angular/core';
 import * as mapTypes from 'angular2-google-maps/core/services/google-maps-types';
-import { Observable } from 'rxjs/Rx';
 import { CountryPath } from '../../model/paths/country-path';
 import { InterestPoint } from '../../model/paths/interest-point';
+import * as _ from 'underscore';
+import { GoogleMapsAPIWrapper } from 'angular2-google-maps/core';
 
 import { STATE_HANDLER_TOKEN } from '../../constants';
 import { ApplicationStateHandler } from '../../application-state/application-state-handler';
@@ -17,7 +17,7 @@ const GMAPS_ADRS_TPE = ['point_of_interest',
   'administrative_area_level_1'];
 
 @Directive({
-  selector: 'app-event-handler'
+  selector: 'app-event-handler',
 })
 export class EventHandlerDirective implements AfterContentInit {
 
@@ -27,60 +27,21 @@ export class EventHandlerDirective implements AfterContentInit {
   constructor(private googleMapsAPIWrapper: GoogleMapsAPIWrapper,
     @Inject(STATE_HANDLER_TOKEN) private applicationStateHandler: ApplicationStateHandler) { }
 
+
   ngAfterContentInit(): void {
 
-    this.initPath().take(1).subscribe(
-      () => { this.populateMarkers(this.path); },
-      error => alert('cannot retrieve paths.' + error),
-      () => {
-        this.populateMarkers(this.path);
-        this.connectMarkers();
-      }
+    this.applicationStateHandler.onCountryPathModified().share().subscribe(
+      latestpath => this.path = latestpath
     );
-
 
     this.googleMapsAPIWrapper.subscribeToMapEvent('dblclick').subscribe(
       (event: any) => {
-        if (!this.path) {
-          this.initPath().take(1).subscribe(
-            () => {
-              this.populateMarkers(this.path);
-              this.savePathAndAddMarker(event.latLng);
-            },
-            error => {
-              alert('cannot retrieve paths.' + error);
-              return;
-            }
-          );
-        } else {
-          this.savePathAndAddMarker(event.latLng);
-        }
+
+        this.savePathAndAddMarker(event.latLng);
+
       },
       error => console.log(error)
     );
-  }
-
-  private initPath(): Observable<void> {
-    return this.applicationStateHandler.onCountryPathModified().map(
-      (path: CountryPath) => {
-        this.path = path;
-      }
-    );
-  }
-
-  private populateMarkers(countryPath: CountryPath) {
-    for (let pathPoint of countryPath.interestPoints) {
-      this.googleMapsAPIWrapper.createMarker({ position: JSON.parse(pathPoint.coordinates) });
-    }
-  }
-
-  private connectMarkers() {
-    for (let index = 0; index < this.path.interestPoints.length - 1; index++) {
-          this.googleMapsAPIWrapper.createPolyline({
-            path: [JSON.parse(this.path.interestPoints[index].coordinates), JSON.parse(this.path.interestPoints[index + 1].coordinates)]
-          });
-        }
-
   }
 
   private savePathAndAddMarker(position: any) {
@@ -104,14 +65,7 @@ export class EventHandlerDirective implements AfterContentInit {
   private enrichAndPopulateNewMarker(results: any, position: any) {
     let markerName = this.findCorrectMarkerName.bind(this)(results);
     this.path.interestPoints.push(new InterestPoint(markerName, JSON.stringify(position)));
-    this.applicationStateHandler.modifyCountryPath(this.path).subscribe(
-      () => this.googleMapsAPIWrapper.createMarker({ position: position }),
-      error => {
-        this.path.interestPoints.pop();
-        console.log('Could not save interest point', error);
-        alert('Could not save interest point, please retry later.');
-      }
-    );
+    this.applicationStateHandler.modifyCountryPath(this.path).subscribe();
   }
 
   private findCorrectMarkerName(results: any): string {
@@ -122,7 +76,6 @@ export class EventHandlerDirective implements AfterContentInit {
       window.alert('No results found');
     }
   }
-
 
   private findCorrectAddress(results: any) {
     for (let type of GMAPS_ADRS_TPE) {

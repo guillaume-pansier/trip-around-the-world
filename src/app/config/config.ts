@@ -40,3 +40,7 @@ export class Config {
     return this.config[key];
   }
 }
+
+export function configFactory(config: Config) {
+  return () => config.load();
+}

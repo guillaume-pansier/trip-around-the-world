@@ -17,7 +17,7 @@ export class InterestPointCellComponent implements OnInit {
 
   private disabled: boolean;
 
-  @Output() interestPointNameChange = new EventEmitter<Array<InterestPoint>>();
+  @Output() interestPointChange = new EventEmitter<Array<InterestPoint>>();
 
   constructor() {
     this.disabled = true;
@@ -31,8 +31,13 @@ export class InterestPointCellComponent implements OnInit {
     setTimeout(() => this.input.setFocus(), 0);
   }
 
+  delete(index) {
+    this.interestPoints.splice(index, 1);
+    this.interestPointChange.emit(this.interestPoints);
+  }
+
   save(value: string) {
-    this.interestPointNameChange.emit(this.interestPoints);
+    this.interestPointChange.emit(this.interestPoints);
     this.disabled = true;
   }
 }

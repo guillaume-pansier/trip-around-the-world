@@ -1,8 +1,16 @@
 <!-- this creates a google map on the page with the given lat/lng from -->
 <!-- the component as the initial center of the map: -->
+<!-- <sebm-google-map-marker *ngFor="let m of markers" [latitude]= 'm.lat' [longitude]='m.lng' (markerClick)="clickedMarker(m)" [iconUrl]='m.iconUrl' [label]=""> -->
 
 <sebm-google-map [latitude]="lat" [longitude]="lng" [fitBounds]="bounds">
   <app-event-handler></app-event-handler>
   <app-overlay-filler [countryId]="country.id"></app-overlay-filler>
   <app-boundaries-controller [zoomCanBeInitialized]="zoomCanBeInitialized" [bounds]="bounds"></app-boundaries-controller>
+  <sebm-google-map-marker *ngFor="let m of markers" [latitude]='m.lat' [longitude]='m.lng' (markerClick)="clickedMarker(m)"
+    [label]="">
+  </sebm-google-map-marker>
+  <sebm-google-map-polyline>
+    <sebm-google-map-polyline-point *ngFor="let p of polylinePoints" [latitude]="p.lat" [longitude]="p.lng">
+    </sebm-google-map-polyline-point>
+  </sebm-google-map-polyline>
 </sebm-google-map>

@@ -1,6 +1,7 @@
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, async, inject } from '@angular/core/testing';
+import { HttpModule } from '@angular/http';
 import { Router } from '@angular/router';
 import { DefaultApplicationStateHandlerService } from './default-application-state-handler.service';
 import { Country } from '../model/country/country';
@@ -26,6 +27,9 @@ class PathServiceStub extends PathRepositoryService {
 describe('Service: DefaultApplicationStateHandler', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [
+        HttpModule
+      ],
       providers: [
         DefaultApplicationStateHandlerService,
         { provide: Router, useClass: RouterStub },
@@ -34,18 +38,18 @@ describe('Service: DefaultApplicationStateHandler', () => {
     });
   });
 
-  it('should be nstantiated',
+  it('should be instantiated',
     inject([DefaultApplicationStateHandlerService, Router], (service: DefaultApplicationStateHandlerService, router: Router) => {
       expect(service).toBeTruthy();
     }));
 
   it('should redirect to correct url when a country is clicked',
     inject([DefaultApplicationStateHandlerService, Router], (service: DefaultApplicationStateHandlerService, router: Router) => {
-         const spy = spyOn(router, 'navigateByUrl');
+      const spy = spyOn(router, 'navigateByUrl');
 
-         service.clicCountry(new Country('path', 'id', 'name'));
-         const navArgs = spy.calls.first().args[0];
+      service.clicCountry(new Country('path', 'id', 'name'));
+      const navArgs = spy.calls.first().args[0];
 
-         expect(navArgs).toBe('/country/id(nav-section:country/id)', 'should navigate to country detail on main and nav sections');
+      expect(navArgs).toBe('/country/id(nav-section:country/id)', 'should navigate to country detail on main and nav sections');
     }));
 });

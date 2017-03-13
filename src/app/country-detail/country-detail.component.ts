@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MapsAPILoader, LatLngBounds } from 'angular2-google-maps/core';
 import { Observable } from 'rxjs/Rx';
 import { Country } from '../model/country/country';
+import { CountryPath } from '../model/paths/country-path';
 
 import { STATE_HANDLER_TOKEN } from '../constants';
 import { ApplicationStateHandler } from '../application-state/application-state-handler';
@@ -12,7 +13,7 @@ declare var google: any;
 @Component({
   selector: 'app-country-detail',
   templateUrl: './country-detail.component.html',
-  styleUrls: ['./country-detail.component.css']
+  styleUrls: ['./country-detail.component.css'],
 })
 export class CountryDetailComponent implements OnInit {
   lat: number;
@@ -21,6 +22,11 @@ export class CountryDetailComponent implements OnInit {
   country: Country;
   countryId: Observable<string>;
   zoomCanBeInitialized = false;
+  private nbMarkers = 0;
+  private markers: Array<any> = [];
+  private polylinePoints: Array<any> = [];
+
+
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -54,6 +60,40 @@ export class CountryDetailComponent implements OnInit {
         });
       });
 
+    this.stateHandler.onCountryPathModified().share().subscribe(
+      (latestPath) => {
+        if (latestPath && this.nbMarkers !== latestPath.interestPoints.length) {
+          this.nbMarkers = latestPath.interestPoints.length;
+          this.markers = [];
+          this.polylinePoints = [];
+          this.populateMarkers(latestPath);
+          this.connectMarkers(latestPath);
+        }
+      }
+    );
   }
 
+  private populateMarkers(countryPath: CountryPath) {
+    for (let pathPoint of countryPath.interestPoints) {
+      let position = JSON.parse(pathPoint.coordinates);
+      let marker: any = {};
+      marker.lat = position.lat;
+      marker.lng = position.lng;
+      this.markers.push(marker);
+    }
+  }
+
+  private connectMarkers(countryPath: CountryPath) {
+    for (let index = 0; index < countryPath.interestPoints.length; index++) {
+      let polylinePoint: any = {};
+      polylinePoint.lat = JSON.parse(countryPath.interestPoints[index].coordinates).lat;
+      polylinePoint.lng = JSON.parse(countryPath.interestPoints[index].coordinates).lng;
+
+      this.polylinePoints.push(polylinePoint);
+      /* 
+       this.googleMapsAPIWrapper.createPolyline({
+         path: [JSON.parse(this.path.interestPoints[index].coordinates), JSON.parse(this.path.interestPoints[index + 1].coordinates)]
+       });*/
+    }
+  }
 }
