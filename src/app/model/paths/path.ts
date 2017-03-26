@@ -4,5 +4,5 @@ export class Path {
 
     public _id: string;
 
-    constructor(public countries: Array<CountryPath>) { };
+    constructor(public name: string, public countries: Array<CountryPath>) { };
 }

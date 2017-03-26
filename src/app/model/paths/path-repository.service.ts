@@ -24,14 +24,13 @@ export class PathRepositoryService {
         if (paths.length === 0) {
           return empty<Path>();
         }
-
         return from(paths);
       });
   }
 
   public savePath(path: Path): Observable<Path> {
 
-    if (path.countries && path.countries.length === 1 && path.countries[0].interestPoints.length === 1) {
+    if (!path._id) {
       return this.http.post('http://192.168.99.100:49160/path', path, { headers: this.headers })
         .map((response: Response) => response.json());
     } else {

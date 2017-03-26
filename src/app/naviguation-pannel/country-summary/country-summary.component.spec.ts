@@ -18,9 +18,11 @@ class ApplicationStateHandlerStub implements ApplicationStateHandler {
 
   onCountryClicked(): Observable<Country> { return empty<Country>(); };
 
-  modifyPath(path: Path): Observable<void> { return empty<void>(); };
+  modifyPath(path: Path): Observable<Path> { return empty<Path>(); };
 
-  onPathModified(): Observable<Path> { return empty<Path>(); };
+  selectPath(path: Path): Observable<void> { return empty<void>(); };
+
+  onActivePathModified(): Observable<Path> { return empty<Path>(); };
 
   modifyCountryPath(countryPath: CountryPath): Observable<void> { return empty<void>(); };
 

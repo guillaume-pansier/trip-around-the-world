@@ -1,11 +1,16 @@
-.navigation-pannel{
+.navigation-pannel { 
+  font-size: 14px;
   vertical-align: top;
   width: 20vw;
-  display:inline-block;
+  display: inline-block;
   white-space: normal;
-  text-align: center;
   color: darkslategrey;
   padding: 0 10px;
   margin:0;
+  margin-top: 20px;
   background-color: transparent;
+}
+
+.description {
+  margin-top: 20px;
 }

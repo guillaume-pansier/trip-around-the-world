@@ -10,9 +10,11 @@ export interface ApplicationStateHandler {
 
     onCountryClicked(): Observable<Country>;
 
-    modifyPath(path: Path): Observable<void>;
+    modifyPath(path: Path): Observable<Path>;
 
-    onPathModified(): Observable<Path>;
+    selectPath(path: Path): Observable<void>;
+
+    onActivePathModified(): Observable<Path>;
 
     modifyCountryPath(countryPath: CountryPath): Observable<void>;
 

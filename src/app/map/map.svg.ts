@@ -1,13 +1,16 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, AfterViewInit, ViewChildren, QueryList } from '@angular/core';
 import { Router } from '@angular/router';
 import { DOCUMENT } from '@angular/platform-browser';
 import { Country } from '../model/country/country';
-import { STYLE_CLASS_NORMAL, STYLE_CLASS_HOVER } from './country.svg';
+import { Path } from '../model/paths/path';
+import { STYLE_CLASS_NORMAL, STYLE_CLASS_HOVER, STYLE_CLASS_VISITED } from './country.svg';
 import { CountryRepository } from '../model/country/country.repository';
 import { CONTRY_REPO_TOKEN } from '../model/country/country.repository.constants';
 import { Observable } from 'rxjs/Rx';
 import { STATE_HANDLER_TOKEN } from '../constants';
 import { ApplicationStateHandler } from '../application-state/application-state-handler';
+import { CountrySVGComponent } from './country.svg';
+
 
 
 @Component({
@@ -15,18 +18,52 @@ import { ApplicationStateHandler } from '../application-state/application-state-
   templateUrl: 'map.svg.html',
   styleUrls: ['map.svg.css']
 })
-export class MapSVGComponent implements OnInit {
-
+export class MapSVGComponent implements OnInit, AfterViewInit {
   private countriesObservable: Observable<Array<Country>>;
+  private activePath: Path;
+  @ViewChildren(CountrySVGComponent) svgCountries: QueryList<CountrySVGComponent>;
 
-  constructor(@Inject(DOCUMENT) private document, @Inject(CONTRY_REPO_TOKEN) private countryRepository: CountryRepository,
-              private router: Router,
-              @Inject(STATE_HANDLER_TOKEN) private stateHandler: ApplicationStateHandler) {
+  constructor( @Inject(DOCUMENT) private document, @Inject(CONTRY_REPO_TOKEN) private countryRepository: CountryRepository,
+    private router: Router,
+    @Inject(STATE_HANDLER_TOKEN) private stateHandler: ApplicationStateHandler) {
 
   }
 
   ngOnInit(): void {
     this.countriesObservable = this.countryRepository.loadCountries();
+  }
+
+  ngAfterViewInit(): void {
+
+    if (this.svgCountries.length > 0) {
+      this.stateHandler.onActivePathModified()
+        .distinctUntilChanged()
+        .filter(path => path !== null)
+        .map(path => {
+          if (this.activePath) {
+            this.removePreviousActivePath(this.activePath);
+          }
+          this.activePath = path;
+          this.colorCountriesFromPath(path);
+        }).subscribe(() => { }, () => { }, () => { console.log('1 finsihed'); });
+    } else {
+      this.svgCountries.changes.take(1).subscribe(
+        () => { },
+        () => { },
+        () => {
+          this.stateHandler.onActivePathModified()
+            .distinctUntilChanged()
+            .filter(path => path !== null)
+            .map(path => {
+              if (this.activePath) {
+                this.removePreviousActivePath(this.activePath);
+              }
+              this.activePath = path;
+              this.colorCountriesFromPath(path);
+            }).subscribe(() => { }, () => { }, () => { console.log('2 finsihed'); });
+        });
+    }
+
   }
 
   onClickCountry(country: Country) {
@@ -37,8 +74,24 @@ export class MapSVGComponent implements OnInit {
     this.changeCountryStyle(country.id, STYLE_CLASS_NORMAL, STYLE_CLASS_HOVER);
   }
 
-  onLeaveCountry(country: Country)  {
+  onLeaveCountry(country: Country) {
     this.changeCountryStyle(country.id, STYLE_CLASS_HOVER, STYLE_CLASS_NORMAL);
+  }
+
+  colorCountriesFromPath(path: Path) {
+    if (path) {
+      for (let countryPath of path.countries) {
+        if (countryPath.interestPoints && countryPath.interestPoints.length > 0) {
+          this.addCountryStyle(countryPath.countryid, STYLE_CLASS_VISITED);
+        }
+      }
+    }
+  }
+
+  removePreviousActivePath(path: Path) {
+    for (let countryPath of path.countries) {
+      this.removeCountryStyle(countryPath.countryid, STYLE_CLASS_VISITED);
+    }
   }
 
   private changeCountryStyle(countryId, initialState, goalState) {
@@ -50,10 +103,26 @@ export class MapSVGComponent implements OnInit {
     }
   }
 
-  private swapStyle(child, styleToRemove, styleToAdd) {
-    if (child.classList.contains(styleToRemove)) {
-      child.classList.remove(styleToRemove);
-      child.classList.add(styleToAdd);
+  private swapStyle(element, styleToRemove, styleToAdd) {
+    if (element.classList.contains(styleToRemove)) {
+      element.classList.remove(styleToRemove);
+      element.classList.add(styleToAdd);
+    }
+  }
+
+  private addCountryStyle(countryId, style) {
+    let countryContainer = this.document.getElementById(countryId);
+    countryContainer.classList.add(style);
+    for (let child of countryContainer.children) {
+      child.classList.add(style);
+    }
+  }
+
+  private removeCountryStyle(countryId, style) {
+    let countryContainer = this.document.getElementById(countryId);
+    countryContainer.classList.remove(style);
+    for (let child of countryContainer.children) {
+      child.classList.remove(style);
     }
   }
 }

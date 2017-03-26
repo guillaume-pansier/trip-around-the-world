@@ -5,6 +5,8 @@ import { Country } from '../model/country/country';
 
 export const STYLE_CLASS_NORMAL = 'landxx';
 export const STYLE_CLASS_HOVER = 'landxxHover';
+export const STYLE_CLASS_VISITED = 'visited';
+
 
 @Component({
   selector: 'g',

@@ -6,7 +6,9 @@ import { ApplicationStateHandler } from './application-state-handler';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
 import { BehaviorSubject } from 'rxjs/Rx';
+
 import { PathRepositoryService } from '../model/paths/path-repository.service';
+import { of } from 'rxjs/observable/of';
 
 
 
@@ -27,28 +29,19 @@ export class DefaultApplicationStateHandlerService implements ApplicationStateHa
     this.countryEventChannel.next(country);
 
 
-    this.pathRepositoryService.getPaths()
-      .defaultIfEmpty(new Path([new CountryPath(country.id, [])]))
-      .subscribe((path: Path) => {
-        let resultPath = path;
-        let countryPath = resultPath.countries.find(pathCountry => pathCountry.countryid === country.id);
-        if (!countryPath) {
-          countryPath = new CountryPath(country.id, []);
-          resultPath.countries.push(countryPath);
-        }
+    if (this.path) {
+      let countryPath = this.path.countries.find(pathCountry => pathCountry.countryid === country.id);
+      if (!countryPath) {
+        countryPath = new CountryPath(country.id, []);
+        this.path.countries.push(countryPath);
+      }
 
-        this.path = resultPath;
-        this.countryPath = countryPath;
-        this.pathEventChannel.next(resultPath);
-        this.contryPathEventChannel.next(countryPath);
-      },
-      error => {
-        this.pathEventChannel.error(error);
-        this.contryPathEventChannel.error(error);
-      },
-      () => this.router.navigateByUrl('/country/' + country.id + '(nav-section:country/' + country.id + ')')
-      );
-
+      this.countryPath = countryPath;
+      this.contryPathEventChannel.next(countryPath);
+      this.router.navigateByUrl('/country/' + country.id + '(nav-section:country/' + country.id + ')');
+    } else {
+      alert('Please create a new trip :)');
+    }
   }
 
   modifyCountryPath(countryPath: CountryPath): Observable<void> {
@@ -65,20 +58,32 @@ export class DefaultApplicationStateHandlerService implements ApplicationStateHa
   }
 
   onCountryClicked(): Observable<Country> {
-    return this.countryEventChannel;
+    return this.countryEventChannel.asObservable();
   }
 
-  modifyPath(path: Path): Observable<void> {
-
+  modifyPath(path: Path): Observable<Path> {
     return this.pathRepositoryService.savePath(path)
+      .map(savedPath => {
+        this.pathEventChannel.next(savedPath);
+        this.path = savedPath;
+        return this.path;
+      });
+  }
+
+  selectPath(path: Path): Observable<void> {
+    this.path = path;
+    return of(path)
       .map(savedPath => this.pathEventChannel.next(savedPath));
   }
 
-  onPathModified(): Observable<Path> {
-    return this.pathEventChannel;
+  onActivePathModified(): Observable<Path> {
+    return this.pathEventChannel.asObservable();
   }
 
   onCountryPathModified(): Observable<CountryPath> {
-    return this.contryPathEventChannel;
+    return this.contryPathEventChannel.asObservable()
+      .filter(path => {
+        return path !== null && path !== undefined;
+      });
   }
 }
