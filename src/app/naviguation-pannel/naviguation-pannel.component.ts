@@ -64,4 +64,7 @@ export class NaviguationPannelComponent implements OnInit {
     this.applicationStateHandler.selectPath(this.activePath).subscribe();
   }
 
+  isActivePath(path: Path) {
+    return this.activePath === path;
+  }
 }
