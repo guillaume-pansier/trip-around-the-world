@@ -1,25 +1,32 @@
 <nav class="navigation-pannel" class="navigation-pannel">
   <div class="container-fluid text-center">
     
-    <div *ngIf="this.paths?.length > 1">
+    <div *ngIf="this.activePath">
       <div class="row">
         <h3 class="col-md-12">All Trips</h3>
       </div>
 
       <div class="row">
         <div class="btn-group-vertical col-md-12" role="group">
-          <button type="button" *ngFor="let path of this.paths" [class.btn-primary]="isActivePath(path)" [class.btn-info]="!isActivePath(path)" class="btn-sm btn-block" (click)="selectTrip(path)">
+          <button class="btn-primary btn-sm btn-block">
+              {{activePath.name}}
+          </button>
+          <button *ngFor="let path of this.otherPaths" class="btn-info btn-sm btn-block" (click)="selectTrip(path)">
             {{path.name}}
           </button>
+          
+          <!--<button type="button" *ngFor="let path of this.paths" [ngClass]="{'btn-primary': isActivePath(path), 'btn-info': !isActivePath(path) }" class="btn-sm btn-block" (click)="selectTrip(path)">
+            {{path.name}}
+          </button> -->
         </div>
       </div>
     </div>
 
     <div class="row">
-      <h3 class="col-md-12" *ngIf="this.paths?.length == 1">No other trips available... Create new ones !</h3>
+      <h3 class="col-md-12" *ngIf="this.otherPaths?.length === 0">No other trips available... Create new ones !</h3>
     </div>
 
-    <div *ngIf="this.paths?.length === 0">
+    <div *ngIf="!this.activePath">
       You haven't defined any trip yet. Create a new one !
     </div>
 
@@ -31,9 +38,5 @@
 
   <app-modal-component #childModal (newTrip)="onNewTripConfirmation($event)">
   </app-modal-component>
-
-  <!--<p *ngIf="this.paths?.length >= 1" class="text-primary text-center description">
-    You have already planned trips ! Here, you can choose a trip and continue planning it, or begin planning a new one.
-  </p>-->
 
 </nav>

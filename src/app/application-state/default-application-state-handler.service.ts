@@ -71,9 +71,9 @@ export class DefaultApplicationStateHandlerService implements ApplicationStateHa
   }
 
   selectPath(path: Path): Observable<void> {
+    this.pathEventChannel.next(path);
     this.path = path;
-    return of(path)
-      .map(savedPath => this.pathEventChannel.next(savedPath));
+    return of(null);
   }
 
   onActivePathModified(): Observable<Path> {

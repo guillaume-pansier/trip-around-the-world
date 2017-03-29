@@ -18,7 +18,7 @@ export class NaviguationPannelComponent implements OnInit {
 
   @ViewChild('childModal') childModal: ModalComponentComponent;
 
-  private paths: Array<Path> = [];
+  private otherPaths: Array<Path> = [];
   private activePath: Path;
 
   constructor(private pathRepositoryService: PathRepositoryService,
@@ -27,19 +27,18 @@ export class NaviguationPannelComponent implements OnInit {
   }
 
   ngOnInit() {
+
     zip(this.applicationStateHandler.onActivePathModified(),
       this.pathRepositoryService.getPaths().toArray(),
       (activePath: Path, paths: Array<Path>) => {
-        this.paths = paths;
+        this.otherPaths = paths;
         return activePath;
       }
     ).flatMap((activePath: Path) => {
       if (!activePath) {
-        this.activePath = this.paths[0];
-        return this.applicationStateHandler.selectPath(this.activePath);
+        return this.selectTrip(this.otherPaths[0]);
       } else {
-        this.activePath = activePath;
-        return of(null);
+        return this.selectTrip(activePath);
       }
     }).subscribe();
   }
@@ -49,22 +48,32 @@ export class NaviguationPannelComponent implements OnInit {
   }
 
   onNewTripConfirmation(tripName) {
-    this.applicationStateHandler.modifyPath(new Path(tripName, [])).subscribe(
-      (path) => { this.activePath = path; },
+    this.applicationStateHandler.modifyPath(new Path(tripName, []))
+      .flatMap(path => {
+        this.otherPaths.push(this.activePath);
+        return this.selectTrip(this.activePath);
+      })
+      .subscribe(
+      () => { },
       (error) => console.error(error),
-      () => {
-        this.paths.push(this.activePath);
-        this.selectTrip(this.activePath);
-      }
     );
   }
 
   selectTrip(path: Path) {
-    this.activePath = path;
-    this.applicationStateHandler.selectPath(this.activePath).subscribe();
-  }
 
-  isActivePath(path: Path) {
-    return this.activePath === path;
+    if (this.activePath) {
+      if (this.activePath._id === path._id) {
+        let indexOfActivePath = this.otherPaths.findIndex(pathItem => pathItem._id === this.activePath._id);
+        this.otherPaths.splice(indexOfActivePath, 1);
+      } else {
+        let indexOfActivePath = this.otherPaths.findIndex(pathItem => pathItem._id === path._id);
+        this.otherPaths.splice(indexOfActivePath, 1, this.activePath);
+      }
+    } else {
+      let indexOfActivePath = this.otherPaths.findIndex(pathItem => pathItem._id === path._id);
+      this.otherPaths.splice(indexOfActivePath, 1);
+    }
+    this.activePath = path;
+    return this.applicationStateHandler.selectPath(this.activePath);
   }
 }
