@@ -5,8 +5,6 @@ import { STATE_HANDLER_TOKEN } from '../constants';
 import { ApplicationStateHandler } from '../application-state/application-state-handler';
 import { ModalComponentComponent } from './modal-component/modal-component.component';
 import { zip } from 'rxjs/observable/zip';
-import { of } from 'rxjs/observable/of';
-
 
 
 @Component({

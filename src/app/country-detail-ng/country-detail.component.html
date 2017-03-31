@@ -1,0 +1,20 @@
+<!-- this creates a google map on the page with the given lat/lng from -->
+<!-- the component as the initial center of the map: -->
+
+<ngui-map 
+    [center]="mapProps.center"
+    [zoom]="mapProps.zoom"
+    [geoFallbackCenter]="[22.01, -37.05]"
+    [disableDoubleClickZoom]="true"
+    (mapReady$)="onMapReady($event)"
+    (mapdblClick)="onMapDbClick($event)"
+    class="ngmap">
+     <marker *ngFor="let pos of positions" [position]="pos"></marker>
+     <polyline *ngFor="let path of polylinePaths" [editable]="false"
+      [path]="path"
+      [geodesic]="true"
+      [strokeColor]="'#FF0000'"
+      [strokeOpacity]="1"
+      (initialized$)="onPolyLineReady($event)"
+      [strokeWeight]="2"></polyline>
+</ngui-map>

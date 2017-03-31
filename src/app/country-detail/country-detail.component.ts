@@ -10,6 +10,7 @@ import { ApplicationStateHandler } from '../application-state/application-state-
 
 declare var google: any;
 
+
 @Component({
   selector: 'app-country-detail',
   templateUrl: './country-detail.component.html',
@@ -25,7 +26,6 @@ export class CountryDetailComponent implements OnInit {
   private nbMarkers = 0;
   private markers: Array<any> = [];
   private polylinePoints: Array<any> = [];
-
 
 
   constructor(private route: ActivatedRoute,
@@ -90,7 +90,7 @@ export class CountryDetailComponent implements OnInit {
       polylinePoint.lng = JSON.parse(countryPath.interestPoints[index].coordinates).lng;
 
       this.polylinePoints.push(polylinePoint);
-      /* 
+      /*
        this.googleMapsAPIWrapper.createPolyline({
          path: [JSON.parse(this.path.interestPoints[index].coordinates), JSON.parse(this.path.interestPoints[index + 1].coordinates)]
        });*/

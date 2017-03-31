@@ -2,7 +2,7 @@ import { NgModule }     from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { MapSVGComponent } from '../map/map.svg';
-import { CountryDetailComponent } from '../country-detail/country-detail.component';
+import { CountryDetailComponent } from '../country-detail-ng/country-detail.component';
 import { NaviguationPannelComponent } from '../naviguation-pannel/naviguation-pannel.component';
 import { CountrySummaryComponent } from '../naviguation-pannel/country-summary/country-summary.component';
 
