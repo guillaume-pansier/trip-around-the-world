@@ -192,6 +192,21 @@ export class CountryDetailComponent implements OnInit, OnDestroy {
   }
 
   private connectMarkers(countryPath: CountryPath) {
+    // connect previous country to first interestPoint
+    let previousCountry = this.countryPath.getPreviousCountry();
+    if (previousCountry && previousCountry.hasInterestPoints() && this.countryPath.hasInterestPoints()) {
+      console.log(previousCountry.countryid);
+      let polylinePoint: any = {};
+      polylinePoint.lat = JSON.parse(previousCountry.interestPoints[previousCountry.interestPoints.length - 1].coordinates).lat;
+      polylinePoint.lng = JSON.parse(previousCountry.interestPoints[previousCountry.interestPoints.length - 1].coordinates).lng;
+
+      let polylinePoint2: any = {};
+      polylinePoint2.lat = JSON.parse(countryPath.interestPoints[0].coordinates).lat;
+      polylinePoint2.lng = JSON.parse(countryPath.interestPoints[0].coordinates).lng;
+
+      this.polylinePaths.push([polylinePoint, polylinePoint2]);
+    }
+
     for (let index = 0; index < countryPath.interestPoints.length - 1; index++) {
       let polylinePoint: any = {};
       polylinePoint.lat = JSON.parse(countryPath.interestPoints[index].coordinates).lat;

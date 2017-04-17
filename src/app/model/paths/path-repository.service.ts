@@ -3,6 +3,7 @@ import { Http, Response, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { from } from 'rxjs/observable/from';
 import { empty } from 'rxjs/observable/empty';
+
 import { Path } from './path';
 
 @Injectable()
@@ -17,15 +18,25 @@ export class PathRepositoryService {
   }
 
   public getPaths(): Observable<Path> {
-    return this.http.get('http://192.168.99.100:49160/paths', { headers: this.headers })
-      .map((response: Response) => response.json())
+      return this.http.get('http://192.168.99.100:49160/paths', { headers: this.headers })
+      .map((response: Response) => response.text())
+      .map((json: string) => JSON.parse(json))
       .flatMap((paths: Array<Path>) => {
-
         if (paths.length === 0) {
           return empty<Path>();
         }
+        console.log('pathsJSON', paths);
+        paths = paths.map(path => this.linkCountries(new Path(path)));
         return from(paths);
       });
+  }
+
+  private linkCountries(path: Path): Path {
+    for (let index = 0; index < path.countries.length - 1; index++) {
+      path.countries[index + 1].preceededBy(path.countries[index]);
+      console.log('enrichedPath', path);
+    }
+    return path;
   }
 
   public savePath(path: Path): Observable<Path> {

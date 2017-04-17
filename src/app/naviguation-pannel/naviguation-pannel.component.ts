@@ -29,11 +29,14 @@ export class NaviguationPannelComponent implements OnInit {
     zip(this.applicationStateHandler.onActivePathModified(),
       this.pathRepositoryService.getPaths().toArray(),
       (activePath: Path, paths: Array<Path>) => {
+        console.log('state', paths);
         this.otherPaths = paths;
         return activePath;
       }
     ).flatMap((activePath: Path) => {
+      console.log('observableActivePath', activePath);
       if (!activePath) {
+         console.log('observableActivePath null, set to', this.otherPaths[0]);
         return this.selectTrip(this.otherPaths[0]);
       } else {
         return this.selectTrip(activePath);
@@ -58,19 +61,22 @@ export class NaviguationPannelComponent implements OnInit {
   }
 
   selectTrip(path: Path) {
-
+    console.warn('active', this.activePath);
+    console.warn('new active', path);
+    console.warn('rest', this.otherPaths);
     if (this.activePath) {
+      let indexOfActivePath = this.otherPaths.findIndex(pathItem => pathItem._id === path._id);
       if (this.activePath._id === path._id) {
-        let indexOfActivePath = this.otherPaths.findIndex(pathItem => pathItem._id === this.activePath._id);
         this.otherPaths.splice(indexOfActivePath, 1);
       } else {
-        let indexOfActivePath = this.otherPaths.findIndex(pathItem => pathItem._id === path._id);
+        console.warn('rest, index of active path', indexOfActivePath);
         this.otherPaths.splice(indexOfActivePath, 1, this.activePath);
       }
     } else {
       let indexOfActivePath = this.otherPaths.findIndex(pathItem => pathItem._id === path._id);
       this.otherPaths.splice(indexOfActivePath, 1);
     }
+     console.warn('rest', this.otherPaths);
     this.activePath = path;
     return this.applicationStateHandler.selectPath(this.activePath);
   }

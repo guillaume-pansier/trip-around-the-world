@@ -33,6 +33,7 @@ export class DefaultApplicationStateHandlerService implements ApplicationStateHa
       let countryPath = this.path.countries.find(pathCountry => pathCountry.countryid === country.id);
       if (!countryPath) {
         countryPath = new CountryPath(country.id, []);
+        countryPath.preceededBy(this.countryPath);
         this.path.countries.push(countryPath);
       }
 
@@ -47,7 +48,12 @@ export class DefaultApplicationStateHandlerService implements ApplicationStateHa
   modifyCountryPath(countryPath: CountryPath): Observable<void> {
 
     let indexForReplace = this.path.countries.findIndex(country => country.countryid === countryPath.countryid);
-    this.path.countries.splice(indexForReplace, 1, countryPath);
+    if (!countryPath.hasInterestPoints()) {
+      this.path.countries.splice(indexForReplace, 1);
+    } else {
+      this.path.countries.splice(indexForReplace, 1, countryPath);
+    }
+
     return this.pathRepositoryService.savePath(this.path).map(
       returnedPath => {
         this.path = returnedPath;

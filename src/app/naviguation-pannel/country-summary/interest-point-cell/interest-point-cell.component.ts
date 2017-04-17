@@ -40,4 +40,30 @@ export class InterestPointCellComponent implements OnInit {
     this.interestPointChange.emit(this.interestPoints);
     this.disabled = true;
   }
+
+  swapDown(index: number) {
+    if (index >= this.interestPoints.length - 1) {
+      return;
+    }
+    this.swapInterestPointChange(index, index + 1);
+    this.interestPointChange.emit(this.interestPoints);
+    this.disabled = true;
+  }
+
+  swapUp(index: number) {
+    if (index <= 0) {
+      return;
+    }
+    this.swapInterestPointChange(index, index - 1);
+    this.interestPointChange.emit(this.interestPoints);
+    this.disabled = true;
+  }
+
+  private swapInterestPointChange(firstIndex: number, secondIndex: number) {
+    let nextElement = this.interestPoints[secondIndex];
+    this.interestPoints[secondIndex] = this.interestPoints[firstIndex];
+    this.interestPoints[firstIndex] = nextElement;
+  }
+
+
 }
