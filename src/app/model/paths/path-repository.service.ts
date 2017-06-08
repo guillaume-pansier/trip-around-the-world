@@ -33,7 +33,9 @@ export class PathRepositoryService {
   private linkCountries(path: Path): Path {
     for (let index = 0; index < path.countries.length - 1; index++) {
       path.countries[index + 1].preceededBy(path.countries[index]);
+      path.countries[index].followedBy(path.countries[index + 1]);
     }
+
     return path;
   }
 

@@ -53,7 +53,7 @@ export class CountryRepositoryService implements CountryRepository {
             continue;
           }
 
-          this.countries.push(this.paseCountry(countryJson, codeList, xmlJsonConverter));
+          this.countries.push(this.parseCountry(countryJson, codeList, xmlJsonConverter));
         }
 
         return this.countries;
@@ -61,7 +61,7 @@ export class CountryRepositoryService implements CountryRepository {
     );
   }
 
-  private paseCountry(countryJson, codeList, convert): Country {
+  private parseCountry(countryJson, codeList, convert): Country {
     let countryId: string = countryJson.attributes.id.toUpperCase();
     let countryName = codeList[countryId];
 

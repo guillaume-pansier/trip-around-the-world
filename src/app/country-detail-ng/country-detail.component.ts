@@ -197,7 +197,6 @@ export class CountryDetailComponent implements OnInit, OnDestroy {
     // connect previous country to first interestPoint
     let previousCountry = countryPath.getPreviousCountry();
     if (previousCountry && previousCountry.hasInterestPoints() && countryPath.hasInterestPoints()) {
-      console.log(previousCountry.countryid);
       let polylinePoint: any = {};
       polylinePoint.lat = JSON.parse(previousCountry.interestPoints[previousCountry.interestPoints.length - 1].coordinates).lat;
       polylinePoint.lng = JSON.parse(previousCountry.interestPoints[previousCountry.interestPoints.length - 1].coordinates).lng;

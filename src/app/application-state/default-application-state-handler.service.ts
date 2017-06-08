@@ -35,6 +35,7 @@ export class DefaultApplicationStateHandlerService implements ApplicationStateHa
       if (!countryPaths || countryPaths.length === 0) {
         let countryPath = new CountryPath(country.id, []);
         if (this.countryPaths && this.countryPaths.length > 0) {
+          this.countryPaths[this.countryPaths.length - 1].followedBy(countryPath);
           countryPath.preceededBy(this.countryPaths[this.countryPaths.length - 1]);
         }
         this.path.countries.push(countryPath);
@@ -59,6 +60,7 @@ export class DefaultApplicationStateHandlerService implements ApplicationStateHa
       for (let i = 0; i < countryPathSingleOrArray.length; i++) {
         let indexOfToReplace = this.path.countries.indexOf(countryPathsToReplace[i]);
         if (!countryPathSingleOrArray[i].hasInterestPoints()) {
+          countryPathsToReplace[i].removeFromLinkedList();
           this.path.countries.splice(indexOfToReplace, 1);
         } else {
           this.path.countries.splice(indexOfToReplace, 1, countryPathSingleOrArray[i]);
@@ -77,9 +79,6 @@ export class DefaultApplicationStateHandlerService implements ApplicationStateHa
   }
 
   private addInterestPointToCountryPath(countryPath: CountryPath, newInterestPoint: InterestPoint): Observable<void> {
-
-    console.log('wtf', InterestPoint);
-
     let countryId = countryPath.countryid;
     let lastCountryPath = this.path.countries[this.path.countries.length - 1];
     if (countryId === lastCountryPath.countryid) {
