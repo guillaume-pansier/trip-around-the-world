@@ -32,12 +32,15 @@ export class DefaultApplicationStateHandlerService implements ApplicationStateHa
 
     if (this.path) {
       let countryPaths = this.path.countries.filter(pathCountry => pathCountry.countryid === country.id);
+
+      // first time in the country, init values
       if (!countryPaths || countryPaths.length === 0) {
         let countryPath = new CountryPath(country.id, []);
         if (this.countryPaths && this.countryPaths.length > 0) {
           this.countryPaths[this.countryPaths.length - 1].followedBy(countryPath);
           countryPath.preceededBy(this.countryPaths[this.countryPaths.length - 1]);
         }
+        countryPaths.push(countryPath);
         this.path.countries.push(countryPath);
       }
 
@@ -51,8 +54,8 @@ export class DefaultApplicationStateHandlerService implements ApplicationStateHa
 
   modifyCountryPath(countryPathSingleOrArray: CountryPath[] | CountryPath, newInterestPoint?: InterestPoint): Observable<void> {
 
-    if (countryPathSingleOrArray instanceof CountryPath && newInterestPoint) {
-      return this.addInterestPointToCountryPath(countryPathSingleOrArray, newInterestPoint);
+    if (newInterestPoint) {
+      return this.addInterestPointToCountryPath(<CountryPath>countryPathSingleOrArray, newInterestPoint);
     } else if (countryPathSingleOrArray instanceof Array) {
       let countryId = countryPathSingleOrArray[0].countryid;
       let countryPathsToReplace = this.path.countries.filter(country => country.countryid === countryId);
@@ -79,12 +82,17 @@ export class DefaultApplicationStateHandlerService implements ApplicationStateHa
   }
 
   private addInterestPointToCountryPath(countryPath: CountryPath, newInterestPoint: InterestPoint): Observable<void> {
+
     let countryId = countryPath.countryid;
     let lastCountryPath = this.path.countries[this.path.countries.length - 1];
     if (countryId === lastCountryPath.countryid) {
       lastCountryPath.interestPoints.push(newInterestPoint);
     } else {
-      this.path.countries.push(new CountryPath(countryId, [newInterestPoint]));
+      let newCountryPath = new CountryPath(countryId, [newInterestPoint]);
+      if (this.path.countries[this.path.countries.length - 1]) {
+        newCountryPath.preceededBy(this.path.countries[this.path.countries.length - 1]);
+      }
+      this.path.countries.push(newCountryPath);
     }
 
     return this.pathRepositoryService.savePath(this.path).map(
