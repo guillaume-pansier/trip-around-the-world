@@ -78,12 +78,12 @@ export class CountryDetailComponent implements OnInit, OnDestroy {
       });
 
     this.countryChangeObserver = this.stateHandler.onCountryPathModified().subscribe(
-      (latestPath) => {
-        if (latestPath) {
-          this.countryPaths = latestPath;
+      (latestPaths) => {
+        if (latestPaths) {
+          this.countryPaths = latestPaths;
           this.positions = [];
           this.polylinePaths = [];
-          for (let countryPath of latestPath) {
+          for (let countryPath of latestPaths) {
             this.populateMarkers(countryPath);
             this.connectMarkers(countryPath);
           }
@@ -195,18 +195,8 @@ export class CountryDetailComponent implements OnInit, OnDestroy {
 
   private connectMarkers(countryPath: CountryPath) {
     // connect previous country to first interestPoint
-    let previousCountry = countryPath.getPreviousCountry();
-    if (previousCountry && previousCountry.hasInterestPoints() && countryPath.hasInterestPoints()) {
-      let polylinePoint: any = {};
-      polylinePoint.lat = JSON.parse(previousCountry.interestPoints[previousCountry.interestPoints.length - 1].coordinates).lat;
-      polylinePoint.lng = JSON.parse(previousCountry.interestPoints[previousCountry.interestPoints.length - 1].coordinates).lng;
-
-      let polylinePoint2: any = {};
-      polylinePoint2.lat = JSON.parse(countryPath.interestPoints[0].coordinates).lat;
-      polylinePoint2.lng = JSON.parse(countryPath.interestPoints[0].coordinates).lng;
-
-      this.polylinePaths.push([polylinePoint, polylinePoint2]);
-    }
+    this.connectTwoCountries(countryPath.getPreviousCountry(), countryPath);
+    this.connectTwoCountries(countryPath, countryPath.getNextCountry());
 
     for (let index = 0; index < countryPath.interestPoints.length - 1; index++) {
       let polylinePoint: any = {};
@@ -216,6 +206,20 @@ export class CountryDetailComponent implements OnInit, OnDestroy {
       let polylinePoint2: any = {};
       polylinePoint2.lat = JSON.parse(countryPath.interestPoints[index + 1].coordinates).lat;
       polylinePoint2.lng = JSON.parse(countryPath.interestPoints[index + 1].coordinates).lng;
+
+      this.polylinePaths.push([polylinePoint, polylinePoint2]);
+    }
+  }
+
+  private connectTwoCountries(startingCountry: CountryPath, endingCountry: CountryPath) {
+    if (startingCountry && startingCountry.hasInterestPoints() && endingCountry && endingCountry.hasInterestPoints()) {
+      let polylinePoint: any = {};
+      polylinePoint.lat = JSON.parse(startingCountry.interestPoints[startingCountry.interestPoints.length - 1].coordinates).lat;
+      polylinePoint.lng = JSON.parse(startingCountry.interestPoints[startingCountry.interestPoints.length - 1].coordinates).lng;
+
+      let polylinePoint2: any = {};
+      polylinePoint2.lat = JSON.parse(endingCountry.interestPoints[0].coordinates).lat;
+      polylinePoint2.lng = JSON.parse(endingCountry.interestPoints[0].coordinates).lng;
 
       this.polylinePaths.push([polylinePoint, polylinePoint2]);
     }
