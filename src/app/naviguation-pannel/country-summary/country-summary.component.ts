@@ -11,7 +11,7 @@ import { CountryPath } from '../../model/paths/country-path';
 })
 export class CountrySummaryComponent implements OnInit, OnDestroy {
 
-  private countryPath: CountryPath;
+  countryPaths: CountryPath[];
   private countryChangeObserver;
 
   constructor( @Inject(STATE_HANDLER_TOKEN) private applicationStateHandler: ApplicationStateHandler,
@@ -20,15 +20,15 @@ export class CountrySummaryComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.countryChangeObserver = this.applicationStateHandler.onCountryPathModified().subscribe(
       countryPath => {
-        this.countryPath = countryPath;
+        this.countryPaths = countryPath;
         this.ref.detectChanges();
       }
     );
   }
 
-  onCountryPathChange(interestPoints: Array<InterestPoint>) {
-    this.countryPath.interestPoints = interestPoints;
-    this.applicationStateHandler.modifyCountryPath(this.countryPath)
+  onCountryPathChange(interestPoints: Array<InterestPoint>, countryPath: CountryPath) {
+    countryPath.interestPoints = interestPoints;
+    this.applicationStateHandler.modifyCountryPath(this.countryPaths)
       .subscribe(() => { },
       (error) => {
         console.error(error);
@@ -40,6 +40,5 @@ export class CountrySummaryComponent implements OnInit, OnDestroy {
     this.countryChangeObserver.unsubscribe();
     // here you need to cancel the changes that you make and cause the `this.ref.detectChanges()` to be called.
     this.ref.detach(); // try this
-    // this.authObserver.unsubscribe(); // for me I was detect changes inside "subscribe" so was enough for me to just unsubscribe;
   }
 }

@@ -9,6 +9,7 @@ import { BehaviorSubject } from 'rxjs/Rx';
 
 import { PathRepositoryService } from '../model/paths/path-repository.service';
 import { of } from 'rxjs/observable/of';
+import { InterestPoint } from '../model/paths/interest-point';
 
 
 
@@ -16,11 +17,11 @@ import { of } from 'rxjs/observable/of';
 export class DefaultApplicationStateHandlerService implements ApplicationStateHandler {
 
   private countryEventChannel: BehaviorSubject<Country> = new BehaviorSubject<Country>(null);
-  private contryPathEventChannel: BehaviorSubject<CountryPath> = new BehaviorSubject<CountryPath>(null);
+  private contryPathEventChannel: BehaviorSubject<Array<CountryPath>> = new BehaviorSubject<Array<CountryPath>>([]);
   private pathEventChannel: BehaviorSubject<Path> = new BehaviorSubject<Path>(null);
 
   private path: Path;
-  private countryPath: CountryPath;
+  private countryPaths: Array<CountryPath>;
 
   constructor(private router: Router,
     private pathRepositoryService: PathRepositoryService) { }
@@ -30,35 +31,68 @@ export class DefaultApplicationStateHandlerService implements ApplicationStateHa
 
 
     if (this.path) {
-      let countryPath = this.path.countries.find(pathCountry => pathCountry.countryid === country.id);
-      if (!countryPath) {
-        countryPath = new CountryPath(country.id, []);
-        countryPath.preceededBy(this.countryPath);
+      let countryPaths = this.path.countries.filter(pathCountry => pathCountry.countryid === country.id);
+      if (!countryPaths || countryPaths.length === 0) {
+        let countryPath = new CountryPath(country.id, []);
+        if (this.countryPaths && this.countryPaths.length > 0) {
+          countryPath.preceededBy(this.countryPaths[this.countryPaths.length - 1]);
+        }
         this.path.countries.push(countryPath);
       }
 
-      this.countryPath = countryPath;
-      this.contryPathEventChannel.next(countryPath);
+      this.countryPaths = countryPaths;
+      this.contryPathEventChannel.next(countryPaths);
       this.router.navigateByUrl('/country/' + country.id + '(nav-section:country/' + country.id + ')');
     } else {
       alert('Please create a new trip :)');
     }
   }
 
-  modifyCountryPath(countryPath: CountryPath): Observable<void> {
+  modifyCountryPath(countryPathSingleOrArray: CountryPath[] | CountryPath, newInterestPoint?: InterestPoint): Observable<void> {
 
-    let indexForReplace = this.path.countries.findIndex(country => country.countryid === countryPath.countryid);
-    if (!countryPath.hasInterestPoints()) {
-      this.path.countries.splice(indexForReplace, 1);
+    if (countryPathSingleOrArray instanceof CountryPath && newInterestPoint) {
+      return this.addInterestPointToCountryPath(countryPathSingleOrArray, newInterestPoint);
+    } else if (countryPathSingleOrArray instanceof Array) {
+      let countryId = countryPathSingleOrArray[0].countryid;
+      let countryPathsToReplace = this.path.countries.filter(country => country.countryid === countryId);
+
+      for (let i = 0; i < countryPathSingleOrArray.length; i++) {
+        let indexOfToReplace = this.path.countries.indexOf(countryPathsToReplace[i]);
+        if (!countryPathSingleOrArray[i].hasInterestPoints()) {
+          this.path.countries.splice(indexOfToReplace, 1);
+        } else {
+          this.path.countries.splice(indexOfToReplace, 1, countryPathSingleOrArray[i]);
+        }
+      }
+
+      return this.pathRepositoryService.savePath(this.path).map(
+        returnedPath => {
+          this.path = returnedPath;
+          this.pathEventChannel.next(returnedPath);
+          this.contryPathEventChannel.next(countryPathSingleOrArray);
+        }
+      );
+    }
+
+  }
+
+  private addInterestPointToCountryPath(countryPath: CountryPath, newInterestPoint: InterestPoint): Observable<void> {
+
+    console.log('wtf', InterestPoint);
+
+    let countryId = countryPath.countryid;
+    let lastCountryPath = this.path.countries[this.path.countries.length - 1];
+    if (countryId === lastCountryPath.countryid) {
+      lastCountryPath.interestPoints.push(newInterestPoint);
     } else {
-      this.path.countries.splice(indexForReplace, 1, countryPath);
+      this.path.countries.push(new CountryPath(countryId, [newInterestPoint]));
     }
 
     return this.pathRepositoryService.savePath(this.path).map(
       returnedPath => {
         this.path = returnedPath;
         this.pathEventChannel.next(returnedPath);
-        this.contryPathEventChannel.next(countryPath);
+        this.contryPathEventChannel.next(this.path.countries.filter(_countryPath => _countryPath.countryid === countryId));
       }
     );
   }
@@ -86,10 +120,10 @@ export class DefaultApplicationStateHandlerService implements ApplicationStateHa
     return this.pathEventChannel.asObservable();
   }
 
-  onCountryPathModified(): Observable<CountryPath> {
+  onCountryPathModified(): Observable<Array<CountryPath>> {
     return this.contryPathEventChannel.asObservable()
-      .filter(path => {
-        return path !== null && path !== undefined;
+      .filter(paths => {
+        return paths !== null && paths !== undefined;
       });
   }
 }

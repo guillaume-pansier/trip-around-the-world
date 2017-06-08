@@ -2,6 +2,7 @@ import { Country } from '../model/country/country';
 import { CountryPath } from '../model/paths/country-path';
 import { Observable } from 'rxjs/Rx';
 import { Path } from '../model/paths/path';
+import { InterestPoint } from '../model/paths/interest-point';
 
 
 
@@ -16,7 +17,8 @@ export interface ApplicationStateHandler {
 
     onActivePathModified(): Observable<Path>;
 
-    modifyCountryPath(countryPath: CountryPath): Observable<void>;
+    modifyCountryPath(countryPaths: CountryPath[]): Observable<void>;
+    modifyCountryPath(countryPaths: CountryPath, newInterestPoint: InterestPoint): Observable<void>;
 
-    onCountryPathModified(): Observable<CountryPath>;
+    onCountryPathModified(): Observable<CountryPath[]>;
 }

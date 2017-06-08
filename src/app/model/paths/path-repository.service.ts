@@ -25,7 +25,6 @@ export class PathRepositoryService {
         if (paths.length === 0) {
           return empty<Path>();
         }
-        console.log('pathsJSON', paths);
         paths = paths.map(path => this.linkCountries(new Path(path)));
         return from(paths);
       });
@@ -34,7 +33,6 @@ export class PathRepositoryService {
   private linkCountries(path: Path): Path {
     for (let index = 0; index < path.countries.length - 1; index++) {
       path.countries[index + 1].preceededBy(path.countries[index]);
-      console.log('enrichedPath', path);
     }
     return path;
   }

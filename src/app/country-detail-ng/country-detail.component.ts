@@ -36,7 +36,7 @@ const worldLayer = `[[-180, -85],
 export class CountryDetailComponent implements OnInit, OnDestroy {
   initialized = false;
   country: Country;
-  private countryPath: CountryPath;
+  private countryPaths: CountryPath[];
   private positions: Array<any> = [];
   private polylinePaths: Array<any> = [];
   mapProps: any = {
@@ -80,11 +80,13 @@ export class CountryDetailComponent implements OnInit, OnDestroy {
     this.countryChangeObserver = this.stateHandler.onCountryPathModified().subscribe(
       (latestPath) => {
         if (latestPath) {
-          this.countryPath = latestPath;
+          this.countryPaths = latestPath;
           this.positions = [];
           this.polylinePaths = [];
-          this.populateMarkers(latestPath);
-          this.connectMarkers(latestPath);
+          for (let countryPath of latestPath) {
+            this.populateMarkers(countryPath);
+            this.connectMarkers(countryPath);
+          }
           this.ref.detectChanges();
         }
       }
@@ -135,8 +137,8 @@ export class CountryDetailComponent implements OnInit, OnDestroy {
         }
       })
       .flatMap(name => {
-        this.countryPath.interestPoints.push(new InterestPoint(name, JSON.stringify(event.latLng)));
-        return this.stateHandler.modifyCountryPath(this.countryPath);
+        let lastCountryPath = this.countryPaths[this.countryPaths.length - 1];
+        return this.stateHandler.modifyCountryPath(lastCountryPath, new InterestPoint(name, JSON.stringify(event.latLng)));
       })
       .subscribe(() => { },
       (error) => {
@@ -193,8 +195,8 @@ export class CountryDetailComponent implements OnInit, OnDestroy {
 
   private connectMarkers(countryPath: CountryPath) {
     // connect previous country to first interestPoint
-    let previousCountry = this.countryPath.getPreviousCountry();
-    if (previousCountry && previousCountry.hasInterestPoints() && this.countryPath.hasInterestPoints()) {
+    let previousCountry = countryPath.getPreviousCountry();
+    if (previousCountry && previousCountry.hasInterestPoints() && countryPath.hasInterestPoints()) {
       console.log(previousCountry.countryid);
       let polylinePoint: any = {};
       polylinePoint.lat = JSON.parse(previousCountry.interestPoints[previousCountry.interestPoints.length - 1].coordinates).lat;
