@@ -31,21 +31,17 @@ export class DefaultApplicationStateHandlerService implements ApplicationStateHa
 
 
     if (this.path) {
-      let countryPaths = this.path.countries.filter(pathCountry => pathCountry.countryid === country.id);
+      let selectedCountryPaths = this.path.countries.filter(pathCountry => pathCountry.countryid === country.id);
 
       // first time in the country, init values
-      if (!countryPaths || countryPaths.length === 0) {
-        let countryPath = new CountryPath(country.id, []);
-        if (this.countryPaths && this.countryPaths.length > 0) {
-          this.countryPaths[this.countryPaths.length - 1].followedBy(countryPath);
-          countryPath.preceededBy(this.countryPaths[this.countryPaths.length - 1]);
-        }
-        countryPaths.push(countryPath);
-        this.path.countries.push(countryPath);
+      if (!selectedCountryPaths || selectedCountryPaths.length === 0) {
+        let newCountryPath = this.createNewCountryPath(country.id, []);
+        selectedCountryPaths.push(newCountryPath);
+        this.path.countries.push(newCountryPath);
       }
 
-      this.countryPaths = countryPaths;
-      this.contryPathEventChannel.next(countryPaths);
+      this.countryPaths = selectedCountryPaths;
+      this.contryPathEventChannel.next(selectedCountryPaths);
       this.router.navigateByUrl('/country/' + country.id + '(nav-section:country/' + country.id + ')');
     } else {
       alert('Please create a new trip :)');
@@ -88,10 +84,7 @@ export class DefaultApplicationStateHandlerService implements ApplicationStateHa
     if (countryId === lastCountryPath.countryid) {
       lastCountryPath.interestPoints.push(newInterestPoint);
     } else {
-      let newCountryPath = new CountryPath(countryId, [newInterestPoint]);
-      if (this.path.countries[this.path.countries.length - 1]) {
-        newCountryPath.preceededBy(this.path.countries[this.path.countries.length - 1]);
-      }
+      let newCountryPath = this.createNewCountryPath(countryId, [newInterestPoint]);
       this.path.countries.push(newCountryPath);
     }
 
@@ -102,6 +95,15 @@ export class DefaultApplicationStateHandlerService implements ApplicationStateHa
         this.contryPathEventChannel.next(this.path.countries.filter(_countryPath => _countryPath.countryid === countryId));
       }
     );
+  }
+
+  private createNewCountryPath(countryId: string, newInterestPoints: InterestPoint[]): CountryPath {
+    let newCountryPath = new CountryPath(countryId, newInterestPoints);
+    if (this.path.countries[this.path.countries.length - 1]) {
+      this.path.countries[this.path.countries.length - 1].followedBy(newCountryPath);
+      newCountryPath.preceededBy(this.path.countries[this.path.countries.length - 1]);
+    }
+    return newCountryPath;
   }
 
   onCountryClicked(): Observable<Country> {
