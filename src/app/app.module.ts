@@ -23,6 +23,7 @@ import { InterestPointCellComponent } from './naviguation-pannel/country-summary
 import { FocusDirective } from './naviguation-pannel/country-summary/interest-point-cell/focus.directive';
 import { ModalComponentComponent } from './naviguation-pannel/modal-component/modal-component.component';
 import { NguiMapModule} from '@ngui/map';
+import { CanActivateCountryDetailGuard } from './country-detail/canactivate-country-detail-guard';
 
 
 @NgModule({
@@ -58,7 +59,8 @@ import { NguiMapModule} from '@ngui/map';
   },
     { provide: CONTRY_REPO_TOKEN, useClass: CountryRepositoryService },
     OverlayRepositoryService,
-    PathRepositoryService
+    PathRepositoryService,
+    CanActivateCountryDetailGuard
   ],
   bootstrap: [AppComponent]
 })
