@@ -16,8 +16,8 @@ export class NaviguationPannelComponent implements OnInit {
 
   @ViewChild('childModal') childModal: ModalComponentComponent;
 
-  private otherPaths: Array<Path> = [];
-  private activePath: Path;
+  otherPaths: Array<Path> = [];
+  activePath: Path;
 
   constructor(private pathRepositoryService: PathRepositoryService,
     @Inject(STATE_HANDLER_TOKEN) private applicationStateHandler: ApplicationStateHandler,
@@ -61,20 +61,6 @@ export class NaviguationPannelComponent implements OnInit {
   }
 
   selectTrip(path: Path) {
-    console.warn('active', this.activePath);
-    if (this.activePath) {
-      let indexOfActivePath = this.otherPaths.findIndex(pathItem => pathItem._id === path._id);
-      if (this.activePath._id === path._id) {
-        this.otherPaths.splice(indexOfActivePath, 1);
-      } else {
-        console.warn('rest, index of active path', indexOfActivePath);
-        this.otherPaths.splice(indexOfActivePath, 1, this.activePath);
-      }
-    } else {
-      let indexOfActivePath = this.otherPaths.findIndex(pathItem => pathItem._id === path._id);
-      this.otherPaths.splice(indexOfActivePath, 1);
-    }
-     console.warn('rest', this.otherPaths);
     this.activePath = path;
     return this.applicationStateHandler.selectPath(this.activePath);
   }

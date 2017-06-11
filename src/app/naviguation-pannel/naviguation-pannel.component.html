@@ -1,6 +1,6 @@
 <nav class="navigation-pannel" class="navigation-pannel">
   <div class="container-fluid text-center">
-    
+
     <div *ngIf="this.activePath">
       <div class="row">
         <h3 class="col-md-12">All Trips</h3>
@@ -8,16 +8,9 @@
 
       <div class="row">
         <div class="btn-group-vertical col-md-12" role="group">
-          <button class="btn-primary btn-sm btn-block">
-              {{activePath.name}}
-          </button>
-          <button *ngFor="let path of this.otherPaths" class="btn-info btn-sm btn-block" (click)="selectTrip(path)">
+          <button *ngFor="let path of this.otherPaths" [class.btn-info]="path !== activePath" [class.btn-primary]="path === activePath" class="btn-info btn-sm btn-block" (click)="selectTrip(path)">
             {{path.name}}
           </button>
-          
-          <!--<button type="button" *ngFor="let path of this.paths" [ngClass]="{'btn-primary': isActivePath(path), 'btn-info': !isActivePath(path) }" class="btn-sm btn-block" (click)="selectTrip(path)">
-            {{path.name}}
-          </button> -->
         </div>
       </div>
     </div>
