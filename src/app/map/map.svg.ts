@@ -1,11 +1,11 @@
-import { Component, Inject, OnInit, AfterViewInit, ViewChildren, QueryList } from '@angular/core';
+import { Component, Inject, OnInit, AfterViewInit, ViewChildren, QueryList, ChangeDetectorRef } from '@angular/core';
 import { DOCUMENT } from '@angular/platform-browser';
 import { Country } from '../model/country/country';
 import { Path } from '../model/paths/path';
 import { STYLE_CLASS_NORMAL, STYLE_CLASS_HOVER, STYLE_CLASS_VISITED } from './country.svg';
 import { CountryRepository } from '../model/country/country.repository';
 import { CONTRY_REPO_TOKEN } from '../model/country/country.repository.constants';
-import { Observable } from 'rxjs/Rx';
+import { Observable, Subscription } from 'rxjs/Rx';
 import { STATE_HANDLER_TOKEN } from '../constants';
 import { ApplicationStateHandler } from '../application-state/application-state-handler';
 import { CountrySVGComponent } from './country.svg';
@@ -18,7 +18,8 @@ import { CountrySVGComponent } from './country.svg';
   styleUrls: ['map.svg.css']
 })
 export class MapSVGComponent implements OnInit, AfterViewInit {
-  private countriesObservable: Observable<Array<Country>>;
+
+  countries: Country[];
   private activePath: Path;
   @ViewChildren(CountrySVGComponent) svgCountries: QueryList<CountrySVGComponent>;
 
@@ -28,26 +29,35 @@ export class MapSVGComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.countriesObservable = this.countryRepository.loadCountries();
+
+    this.countryRepository.loadCountries()
+      .map((countries => {
+        this.countries = countries;
+        return this.countries;
+      }))
+      .subscribe(() => { },
+      () => { },
+      () => { });
+
   }
 
   ngAfterViewInit(): void {
-    if (this.svgCountries.length > 0) {
-      this.loadActivePath().subscribe();
+
+    if (this.countries && this.countries.length > 0) {
+      this.loadActivePath().subscribe(() => { },
+        () => { },
+        () => { });
     } else {
-      this.svgCountries.changes.take(1).subscribe(
+      this.svgCountries.changes
+        .flatMap((countries) => this.loadActivePath())
+        .subscribe(() => { },
         () => { },
-        () => { },
-        () => {
-          this.loadActivePath().subscribe();
-        }
-      );
+        () => { });
     }
   }
 
   private loadActivePath(): Observable<void> {
     return this.stateHandler.onActivePathModified()
-      .distinctUntilChanged()
       .filter(path => path !== null)
       .map(path => {
         if (this.activePath) {

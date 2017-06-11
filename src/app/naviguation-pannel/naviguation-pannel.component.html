@@ -8,7 +8,7 @@
 
       <div class="row">
         <div class="btn-group-vertical col-md-12" role="group">
-          <button *ngFor="let path of this.otherPaths" [class.btn-info]="path !== activePath" [class.btn-primary]="path === activePath" class="btn-info btn-sm btn-block" (click)="selectTrip(path)">
+          <button *ngFor="let path of this.otherPaths" [class.btn-info]="!isActivePath(path)" [class.btn-primary]="isActivePath(path)" class="btn-info btn-sm btn-block" (click)="selectTrip(path)">
             {{path.name}}
           </button>
         </div>

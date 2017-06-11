@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, ViewContainerRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { Path } from '../model/paths/path';
 import { PathRepositoryService } from '../model/paths/path-repository.service';
 import { STATE_HANDLER_TOKEN } from '../constants';
@@ -21,7 +21,7 @@ export class NaviguationPannelComponent implements OnInit {
 
   constructor(private pathRepositoryService: PathRepositoryService,
     @Inject(STATE_HANDLER_TOKEN) private applicationStateHandler: ApplicationStateHandler,
-    private viewContainerRef: ViewContainerRef) {
+    private ref: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -29,14 +29,13 @@ export class NaviguationPannelComponent implements OnInit {
     zip(this.applicationStateHandler.onActivePathModified(),
       this.pathRepositoryService.getPaths().toArray(),
       (activePath: Path, paths: Array<Path>) => {
-        console.log('state', paths);
         this.otherPaths = paths;
         return activePath;
       }
     ).flatMap((activePath: Path) => {
       console.log('observableActivePath', activePath);
       if (!activePath) {
-         console.log('observableActivePath null, set to', this.otherPaths[0]);
+        console.log('observableActivePath null, set to', this.otherPaths[0]);
         return this.selectTrip(this.otherPaths[0]);
       } else {
         return this.selectTrip(activePath);
@@ -63,5 +62,9 @@ export class NaviguationPannelComponent implements OnInit {
   selectTrip(path: Path) {
     this.activePath = path;
     return this.applicationStateHandler.selectPath(this.activePath);
+  }
+
+  isActivePath(path: Path): boolean {
+    return this.activePath && this.activePath._id === path._id;
   }
 }
