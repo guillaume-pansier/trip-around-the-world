@@ -1,5 +1,4 @@
 import { Component, Inject, OnInit, AfterViewInit, ViewChildren, QueryList } from '@angular/core';
-import { Router } from '@angular/router';
 import { DOCUMENT } from '@angular/platform-browser';
 import { Country } from '../model/country/country';
 import { Path } from '../model/paths/path';
@@ -24,7 +23,6 @@ export class MapSVGComponent implements OnInit, AfterViewInit {
   @ViewChildren(CountrySVGComponent) svgCountries: QueryList<CountrySVGComponent>;
 
   constructor( @Inject(DOCUMENT) private document, @Inject(CONTRY_REPO_TOKEN) private countryRepository: CountryRepository,
-    private router: Router,
     @Inject(STATE_HANDLER_TOKEN) private stateHandler: ApplicationStateHandler) {
 
   }
@@ -34,36 +32,30 @@ export class MapSVGComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-
     if (this.svgCountries.length > 0) {
-      this.stateHandler.onActivePathModified()
-        .distinctUntilChanged()
-        .filter(path => path !== null)
-        .map(path => {
-          if (this.activePath) {
-            this.removePreviousActivePath(this.activePath);
-          }
-          this.activePath = path;
-          this.colorCountriesFromPath(path);
-        }).subscribe(() => { }, () => { }, () => { console.log('1 finsihed'); });
+      this.loadActivePath().subscribe();
     } else {
       this.svgCountries.changes.take(1).subscribe(
         () => { },
         () => { },
         () => {
-          this.stateHandler.onActivePathModified()
-            .distinctUntilChanged()
-            .filter(path => path !== null)
-            .map(path => {
-              if (this.activePath) {
-                this.removePreviousActivePath(this.activePath);
-              }
-              this.activePath = path;
-              this.colorCountriesFromPath(path);
-            }).subscribe(() => { }, () => { }, () => { console.log('2 finsihed'); });
-        });
+          this.loadActivePath().subscribe();
+        }
+      );
     }
+  }
 
+  private loadActivePath(): Observable<void> {
+    return this.stateHandler.onActivePathModified()
+      .distinctUntilChanged()
+      .filter(path => path !== null)
+      .map(path => {
+        if (this.activePath) {
+          this.removePreviousActivePath(this.activePath);
+        }
+        this.activePath = path;
+        this.colorCountriesFromPath(path);
+      });
   }
 
   onClickCountry(country: Country) {

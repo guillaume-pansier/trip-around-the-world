@@ -56,10 +56,14 @@ describe('Service: DefaultApplicationStateHandler', () => {
   it('should redirect to correct url when a country is clicked',
     inject([DefaultApplicationStateHandlerService, Router], (service: DefaultApplicationStateHandlerService, router: Router) => {
       const spy = spyOn(router, 'navigateByUrl');
-      service.selectPath(new Path('', []));
+      let selectedPath = new Path('', []);
+      selectedPath._id = 'id';
+      service.selectPath(selectedPath);
       service.clicCountry(new Country('path', 'id', 'name'));
       const navArgs = spy.calls.first().args[0];
+      const navArgs2 = spy.calls.mostRecent().args[0];
 
-      expect(navArgs).toBe('/country/id(nav-section:country/id)', 'should navigate to country detail on main and nav sections');
+      expect(navArgs).toBe('/trips/id(nav-section:trips)', 'should navigate to selected trip');
+      expect(navArgs2).toBe('/country/id(nav-section:country/id)', 'should navigate to country detail on main and nav sections');
     }));
 });

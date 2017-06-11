@@ -10,10 +10,12 @@ import { CanActivateCountryDetailGuard } from '../country-detail/canactivate-cou
 @NgModule({
   imports: [
     RouterModule.forRoot([
-      { path: '', outlet: 'nav-section', component: NaviguationPannelComponent },
+      { path: '', redirectTo: '/trips(nav-section:/trips)', pathMatch: 'full'},
+      { path: 'trips', outlet: 'nav-section', component: NaviguationPannelComponent },
       { path: 'country/:id', outlet: 'nav-section', component: CountrySummaryComponent, canActivate: [CanActivateCountryDetailGuard] },
       { path: 'country/:id', component: CountryDetailComponent, canActivate: [CanActivateCountryDetailGuard] },
-      { path: '', component: MapSVGComponent },
+      { path: 'trips', component: MapSVGComponent },
+      { path: 'trips/:id', component: MapSVGComponent },
     ])
   ],
   exports: [

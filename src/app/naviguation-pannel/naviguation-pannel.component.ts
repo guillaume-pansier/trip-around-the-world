@@ -62,8 +62,6 @@ export class NaviguationPannelComponent implements OnInit {
 
   selectTrip(path: Path) {
     console.warn('active', this.activePath);
-    console.warn('new active', path);
-    console.warn('rest', this.otherPaths);
     if (this.activePath) {
       let indexOfActivePath = this.otherPaths.findIndex(pathItem => pathItem._id === path._id);
       if (this.activePath._id === path._id) {

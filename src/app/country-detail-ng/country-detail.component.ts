@@ -1,5 +1,4 @@
 import { Component, OnInit, Inject, ChangeDetectorRef, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
 import { Country } from '../model/country/country';
 import { CountryPath } from '../model/paths/country-path';
@@ -44,9 +43,7 @@ export class CountryDetailComponent implements OnInit, OnDestroy {
   };
   countryChangeObserver: Subscription;
 
-  constructor(private route: ActivatedRoute,
-    private overlayRepository: OverlayRepositoryService,
-    private router: Router,
+  constructor(private overlayRepository: OverlayRepositoryService,
     private geocoder: GeoCoder,
     @Inject(STATE_HANDLER_TOKEN) private stateHandler: ApplicationStateHandler,
     private ref: ChangeDetectorRef) { }

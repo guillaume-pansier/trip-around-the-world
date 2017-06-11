@@ -122,6 +122,8 @@ export class DefaultApplicationStateHandlerService implements ApplicationStateHa
   selectPath(path: Path): Observable<void> {
     this.pathEventChannel.next(path);
     this.path = path;
+    this.router.navigateByUrl('/trips/' + path._id + '(nav-section:trips)');
+
     return of(null);
   }
 
