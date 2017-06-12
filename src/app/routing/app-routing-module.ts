@@ -5,7 +5,7 @@ import { MapSVGComponent } from '../map/map.svg';
 import { CountryDetailComponent } from '../country-detail-ng/country-detail.component';
 import { NaviguationPannelComponent } from '../naviguation-pannel/naviguation-pannel.component';
 import { CountrySummaryComponent } from '../naviguation-pannel/country-summary/country-summary.component';
-import { CanActivateCountryDetailGuard } from '../country-detail/canactivate-country-detail-guard';
+import { CanActivateCountryDetailGuard } from '../canactivate-country-detail-guard';
 
 @NgModule({
   imports: [

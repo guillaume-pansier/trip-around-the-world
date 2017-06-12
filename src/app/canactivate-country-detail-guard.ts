@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, Router } from '@angular/router';
-import { ApplicationStateHandler } from '../application-state/application-state-handler';
-import { STATE_HANDLER_TOKEN } from '../constants';
+import { ApplicationStateHandler } from './application-state/application-state-handler';
+import { STATE_HANDLER_TOKEN } from './constants';
 
 @Injectable()
 export class CanActivateCountryDetailGuard implements CanActivate {
