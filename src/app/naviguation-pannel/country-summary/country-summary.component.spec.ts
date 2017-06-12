@@ -12,8 +12,12 @@ import { CountryPath } from '../../model/paths/country-path';
 import { Observable } from 'rxjs/Rx';
 import { Path } from '../../model/paths/path';
 import { empty } from 'rxjs/observable/empty';
+import { InterestPoint } from '../../model/paths/interest-point';
+import { CountryRepository } from '../../model/country/country.repository';
+import { CONTRY_REPO_TOKEN } from '../../model/country/country.repository.constants';
 
 class ApplicationStateHandlerStub implements ApplicationStateHandler {
+  leaveCountry(country: Country): void { }
   clicCountry(country: Country): void { }
 
   onCountryClicked(): Observable<Country> { return empty<Country>(); };
@@ -24,9 +28,27 @@ class ApplicationStateHandlerStub implements ApplicationStateHandler {
 
   onActivePathModified(): Observable<Path> { return empty<Path>(); };
 
-  modifyCountryPath(countryPath: CountryPath): Observable<void> { return empty<void>(); };
+  modifyCountryPath(countryPathSingleOrArray: CountryPath[] | CountryPath, newInterestPoint?: InterestPoint): Observable<void> {
+    return empty<void>();
+  };
 
-  onCountryPathModified(): Observable<CountryPath> { return empty<CountryPath>(); };
+  onCountryPathModified(): Observable<CountryPath[]> { return empty<CountryPath[]>(); };
+}
+
+class CountryRepositoryMock implements CountryRepository {
+  loadCountries(): Observable<Country[]> {
+    throw new Error("Method not implemented.");
+  }
+  getCountry(countryId: string): Observable<Country> {
+    throw new Error("Method not implemented.");
+  }
+  saveCountry(country: Country): void {
+    throw new Error("Method not implemented.");
+  }
+  saveCountryWithPath(country: Country, path: any): void {
+    throw new Error("Method not implemented.");
+  }
+
 }
 
 describe('CountrySummaryComponent', () => {
@@ -40,7 +62,8 @@ describe('CountrySummaryComponent', () => {
         InterestPointCellComponent
       ],
       providers: [
-        { provide: STATE_HANDLER_TOKEN, useClass: ApplicationStateHandlerStub }
+        { provide: STATE_HANDLER_TOKEN, useClass: ApplicationStateHandlerStub },
+        { provide: CONTRY_REPO_TOKEN, useClass: CountryRepositoryMock }
       ]
     })
       .compileComponents();
