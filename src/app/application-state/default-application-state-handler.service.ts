@@ -48,6 +48,18 @@ export class DefaultApplicationStateHandlerService implements ApplicationStateHa
     }
   }
 
+  leaveCountry(country: Country): void {
+    this.cleanStateIfCountryLeftUnchanged();
+  }
+
+  private cleanStateIfCountryLeftUnchanged() {
+    if (this.countryPaths && this.countryPaths.length === 1 && !this.countryPaths[0].hasInterestPoints()) {
+      this.countryPaths[0].removeFromLinkedList();
+      this.countryPaths = undefined;
+      this.path.countries.pop();
+    }
+  }
+
   modifyCountryPath(countryPathSingleOrArray: CountryPath[] | CountryPath, newInterestPoint?: InterestPoint): Observable<void> {
 
     if (newInterestPoint) {

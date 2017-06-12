@@ -7,18 +7,20 @@ import { InterestPoint } from '../model/paths/interest-point';
 
 
 export interface ApplicationStateHandler {
-    clicCountry(country: Country): void;
+  clicCountry(country: Country): void;
 
-    onCountryClicked(): Observable<Country>;
+  onCountryClicked(): Observable<Country>;
 
-    modifyPath(path: Path): Observable<Path>;
+  modifyPath(path: Path): Observable<Path>;
 
-    selectPath(path: Path): Observable<void>;
+  selectPath(path: Path): Observable<void>;
 
-    onActivePathModified(): Observable<Path>;
+  onActivePathModified(): Observable<Path>;
 
-    modifyCountryPath(countryPaths: CountryPath[]): Observable<void>;
-    modifyCountryPath(countryPaths: CountryPath, newInterestPoint: InterestPoint): Observable<void>;
+  modifyCountryPath(countryPaths: CountryPath[]): Observable<void>;
+  modifyCountryPath(countryPaths: CountryPath, newInterestPoint: InterestPoint): Observable<void>;
 
-    onCountryPathModified(): Observable<CountryPath[]>;
+  onCountryPathModified(): Observable<CountryPath[]>;
+
+  leaveCountry(country: Country): void;
 }

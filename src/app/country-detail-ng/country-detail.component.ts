@@ -33,11 +33,12 @@ const worldLayer = `[[-180, -85],
   styleUrls: ['./country-detail.component.css'],
 })
 export class CountryDetailComponent implements OnInit, OnDestroy {
+  data_layer: any;
   initialized = false;
   country: Country;
   private countryPaths: CountryPath[];
-  private positions: Array<any> = [];
-  private polylinePaths: Array<any> = [];
+  positions: Array<any> = [];
+  polylinePaths: Array<any> = [];
   mapProps: any = {
     center: 'some-invalid-location',
   };
@@ -52,10 +53,7 @@ export class CountryDetailComponent implements OnInit, OnDestroy {
 
 
     this.stateHandler.onCountryClicked()
-      .map(country => {
-        return country;
-      })
-      .find(country => country != null)
+      .filter(country => country != null)
       .flatMap((country: Country) => {
         this.country = country;
         return this.geocoder.geocode({ 'address': country.name, 'region': country.id });
@@ -70,8 +68,7 @@ export class CountryDetailComponent implements OnInit, OnDestroy {
         };
       }).subscribe(
       (props) => {
-        this.mapProps = props;
-        this.initialized = true;
+        this.updateMap(props);
       });
 
     this.countryChangeObserver = this.stateHandler.onCountryPathModified().subscribe(
@@ -90,17 +87,38 @@ export class CountryDetailComponent implements OnInit, OnDestroy {
     );
   }
 
+  private updateMap(props: any) {
+    this.mapProps = props;
+    if (this.initialized) {
+      let self = this;
+      if (this.data_layer) {
+        this.data_layer.forEach(function (feature) {
+          self.data_layer.remove(feature);
+        });
+        self.loadDataLayer();
+      }
+    } else {
+      this.initialized = true;
+    }
+    this.ref.detectChanges();
+  }
 
   onMapReady(map) {
     this.fitBounds(map);
     map.addListener('dblclick', this.onMapDbClick.bind(this));
     let data_layer = new google.maps.Data({ map: map });
+    this.data_layer = data_layer;
     data_layer.setStyle({ // using set style we can set styles for all boundaries at once
       fillColor: 'white',
       strokeWeight: 0.1,
       fillOpacity: 0.7
     });
 
+    this.loadDataLayer();
+
+  }
+
+  private loadDataLayer() {
     this.overlayRepository.getOverlayForCountryId(this.country.id)
       .subscribe((countryLayer) => {
         let layer = '[' + worldLayer + ',' + countryLayer + ']';
@@ -109,9 +127,8 @@ export class CountryDetailComponent implements OnInit, OnDestroy {
           'id': this.country.id,
           'properties': { 'name': this.country.id }, 'geometry': { 'type': 'Polygon', 'coordinates': JSON.parse(layer) }
         };
-        data_layer.addGeoJson(geoJson);
+        this.data_layer.addGeoJson(geoJson);
       });
-
   }
 
   fitBounds(map) {
@@ -227,5 +244,7 @@ export class CountryDetailComponent implements OnInit, OnDestroy {
     // here you need to cancel the changes that you make and cause the `this.ref.detectChanges()` to be called.
     this.ref.detach(); // try this
     // this.authObserver.unsubscribe(); // for me I was detect changes inside "subscribe" so was enough for me to just unsubscribe;
+
+    this.stateHandler.leaveCountry(this.country);
   }
 }
