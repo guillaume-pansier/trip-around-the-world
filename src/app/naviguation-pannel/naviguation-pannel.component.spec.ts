@@ -17,6 +17,7 @@ import { CountryPath } from '../model/paths/country-path';
 import { ApplicationStateHandler } from '../application-state/application-state-handler';
 import { STATE_HANDLER_TOKEN } from '../constants';
 import { HttpModule } from '@angular/http';
+import { InterestPoint } from '../model/paths/interest-point';
 
 
 
@@ -31,6 +32,9 @@ class PathServiceStub extends PathRepositoryService {
 }
 
 class ApplicationStateHandlerStub implements ApplicationStateHandler {
+  leaveCountry(country: Country): void {
+    throw new Error("Method not implemented.");
+  }
   clicCountry(country: Country): void { }
 
   onCountryClicked(): Observable<Country> { return empty<Country>(); };
@@ -41,9 +45,11 @@ class ApplicationStateHandlerStub implements ApplicationStateHandler {
 
   onActivePathModified(): Observable<Path> { return empty<Path>(); };
 
-  modifyCountryPath(countryPath: CountryPath): Observable<void> { return empty<void>(); };
+   modifyCountryPath(countryPathSingleOrArray: CountryPath[] | CountryPath, newInterestPoint?: InterestPoint): Observable<void> {
+      return empty<void>();
+    };
 
-  onCountryPathModified(): Observable<CountryPath> { return empty<CountryPath>(); };
+  onCountryPathModified(): Observable<CountryPath[]> { return empty<CountryPath[]>(); };
 }
 
 describe('NaviguationPannelComponent', () => {
