@@ -37,6 +37,7 @@ export class CountryDetailComponent implements OnInit, OnDestroy {
   initialized = false;
   country: Country;
   private countryPaths: CountryPath[];
+  interestPoints: InterestPoint[];
   positions: Array<any> = [];
   polylinePaths: Array<any> = [];
   mapProps: any = {
@@ -75,10 +76,11 @@ export class CountryDetailComponent implements OnInit, OnDestroy {
       (latestPaths) => {
         if (latestPaths) {
           this.countryPaths = latestPaths;
+          this.interestPoints = latestPaths.map(countryPath => countryPath.interestPoints)
+            .reduce((points1, points2) => points1.concat(points2));
           this.positions = [];
           this.polylinePaths = [];
           for (let countryPath of latestPaths) {
-            this.populateMarkers(countryPath);
             this.connectMarkers(countryPath);
           }
           this.ref.detectChanges();
@@ -200,11 +202,19 @@ export class CountryDetailComponent implements OnInit, OnDestroy {
     polyline.setOptions({ icons: [{ icon: { path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW }, offset: '100%' }] });
   }
 
-  private populateMarkers(countryPath: CountryPath) {
-    for (let pathPoint of countryPath.interestPoints) {
-      let position = JSON.parse(pathPoint.coordinates);
-      this.positions.push([position.lat, position.lng]);
-    }
+  private getPositionOf(interestPoint: InterestPoint) {
+    return JSON.parse(interestPoint.coordinates);
+  }
+
+
+  onMarkerOver(markerEvent, index) {
+    let marker = markerEvent.target;
+    marker.nguiMapComponent.openInfoWindow('iw_' + index, marker);
+  }
+
+  hideMarkerInfo(markerEvent, index) {
+    let marker = markerEvent.target;
+    marker.nguiMapComponent.infoWindows['iw_' + index].infoWindow.close();
   }
 
   private connectMarkers(countryPath: CountryPath) {

@@ -9,7 +9,20 @@
     (mapReady$)="onMapReady($event)"
     (mapdblClick)="onMapDbClick($event)"
     class="ngmap">
-     <marker *ngFor="let pos of positions" [position]="pos"></marker>
+     <!--<marker *ngFor="let pos of positions" [position]="pos" (mouseover)="onMarkerOver($event)">
+       <info-window id="iw">
+        <button (click)="hideMarkerInfo()">Hide Info</button>
+      </info-window>
+     </marker>-->
+      <marker *ngFor="let interestPoint of interestPoints; let i = index" [position]="getPositionOf(interestPoint)"
+        (mouseover)="onMarkerOver($event, i)"
+        (mouseout)="hideMarkerInfo($event, i)">
+       <info-window id="iw_{{i}}">
+        <div>
+         {{interestPoint.name}}
+        </div>
+      </info-window>
+     </marker>
      <polyline *ngFor="let path of polylinePaths" [editable]="false"
       [path]="path"
       [geodesic]="true"
