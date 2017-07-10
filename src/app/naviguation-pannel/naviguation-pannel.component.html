@@ -1,32 +1,26 @@
 <nav class="navigation-pannel" class="navigation-pannel">
   <div class="container-fluid text-center">
-
-    <div *ngIf="this.activePath">
+    <div *ngIf="this.paths?.length > 0">
       <div class="row">
         <h3 class="col-md-12">All Trips</h3>
       </div>
-
       <div class="row">
         <div class="btn-group-vertical col-md-12" role="group">
-          <button *ngFor="let path of this.otherPaths" [class.btn-info]="!isActivePath(path)" [class.btn-primary]="isActivePath(path)" class="btn-info btn-sm btn-block" (click)="selectTrip(path)">
+          <button *ngFor="let path of this.paths; trackBy: path?._id" [class.btn-info]="!isActivePath(path)" [class.btn-primary]="isActivePath(path)"
+            class="btn-info btn-sm btn-block" (click)="selectTrip(path)">
             {{path.name}}
           </button>
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="row">
-      <h3 class="col-md-12" *ngIf="this.otherPaths?.length === 0">No other trips available... Create new ones !</h3>
-    </div>
+  <div class="row">
+    <h3 class="col-md-12" *ngIf="this.paths?.length === 0">No other trips available... Create new ones !</h3>
+  </div>
 
-    <div *ngIf="!this.activePath">
-      You haven't defined any trip yet. Create a new one !
-    </div>
-
-    <div class="row">
-      <button (click)="onNewTripAsked()" type="button" class="col-md-offset-2 col-md-8 btn btn-info btn-lg text-center description">Create a new trip</button>
-    </div>
-
+  <div class="row">
+    <button (click)="onNewTripAsked()" type="button" class="col-md-offset-2 col-md-8 btn btn-info btn-lg text-center description">Create a new trip</button>
   </div>
 
   <app-modal-component #childModal (newTrip)="onNewTripConfirmation($event)">

@@ -5,6 +5,7 @@ import { STATE_HANDLER_TOKEN } from '../constants';
 import { ApplicationStateHandler } from '../application-state/application-state-handler';
 import { ModalComponentComponent } from './modal-component/modal-component.component';
 import { zip } from 'rxjs/observable/zip';
+import { empty } from 'rxjs/observable/empty';
 
 
 @Component({
@@ -16,7 +17,7 @@ export class NaviguationPannelComponent implements OnInit {
 
   @ViewChild('childModal') childModal: ModalComponentComponent;
 
-  otherPaths: Array<Path> = [];
+  paths: Array<Path> = [];
   activePath: Path;
 
   constructor(private pathRepositoryService: PathRepositoryService,
@@ -29,18 +30,21 @@ export class NaviguationPannelComponent implements OnInit {
     zip(this.applicationStateHandler.onActivePathModified(),
       this.pathRepositoryService.getPaths().toArray(),
       (activePath: Path, paths: Array<Path>) => {
-        this.otherPaths = paths;
+        this.paths = paths;
         return activePath;
       }
-    ).flatMap((activePath: Path) => {
-      console.log('observableActivePath', activePath);
-      if (!activePath) {
-        console.log('observableActivePath null, set to', this.otherPaths[0]);
-        return this.selectTrip(this.otherPaths[0]);
-      } else {
-        return this.selectTrip(activePath);
-      }
-    }).subscribe();
+    )
+      .flatMap((activePath: Path) => {
+        console.log('observableActivePath', activePath);
+        if (!activePath && this.paths[0]) {
+          console.log('observableActivePath null, set to', this.paths[0]);
+          return this.selectTrip(this.paths[0]);
+        } else if (activePath) {
+          return this.selectTrip(activePath);
+        } else {
+          return empty<void>();
+        }
+      }).subscribe();
   }
 
   onNewTripAsked() {
@@ -50,8 +54,8 @@ export class NaviguationPannelComponent implements OnInit {
   onNewTripConfirmation(tripName) {
     this.applicationStateHandler.modifyPath(new Path(tripName, []))
       .flatMap(path => {
-        this.otherPaths.push(this.activePath);
-        return this.selectTrip(this.activePath);
+        this.paths.push(path);
+        return this.selectTrip(path);
       })
       .subscribe(
       () => { },
