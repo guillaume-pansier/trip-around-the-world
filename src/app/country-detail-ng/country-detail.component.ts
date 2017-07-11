@@ -67,8 +67,8 @@ export class CountryDetailComponent implements OnInit, OnDestroy {
           },
           'bounds': locations[0].geometry.viewport,
         };
-      }).subscribe(
-      (props) => {
+      })
+      .subscribe((props) => {
         this.updateMap(props);
       });
 
