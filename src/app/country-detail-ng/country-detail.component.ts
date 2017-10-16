@@ -211,12 +211,12 @@ export class CountryDetailComponent implements OnInit, OnDestroy {
 
   onMarkerOver(markerEvent, index) {
     let marker = markerEvent.target;
-    marker.nguiMapComponent.openInfoWindow('iw_' + index, marker);
+    marker.nguiMapComponent.openInfoWindow('iw', marker);
   }
 
   hideMarkerInfo(markerEvent, index) {
     let marker = markerEvent.target;
-    marker.nguiMapComponent.infoWindows['iw_' + index].infoWindow.close();
+    marker.nguiMapComponent.infoWindows['iw'].infoWindow.close();
   }
 
   private connectMarkers(countryPath: CountryPath) {

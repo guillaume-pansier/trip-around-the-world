@@ -17,7 +17,7 @@
       <marker *ngFor="let interestPoint of interestPoints; let i = index" [position]="getPositionOf(interestPoint)"
         (mouseover)="onMarkerOver($event, i)"
         (mouseout)="hideMarkerInfo($event, i)">
-       <info-window id="iw_{{i}}">
+       <info-window id="iw">
         <div>
          {{interestPoint.name}}
         </div>
