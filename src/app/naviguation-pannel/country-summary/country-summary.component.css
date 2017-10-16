@@ -5,6 +5,8 @@
     width: 20vw;
     display: inline-block;
     white-space: normal;
+    padding-left:5px;
+    padding-right:5px;
 }
 
 .nopadding {

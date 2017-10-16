@@ -18,10 +18,10 @@
 
 .interestPointContainer {
     width: auto;
-    overflow: hidden; 
+    overflow: hidden;
 }
 
-.remainingWidth { 
+.remainingWidth {
     display: block;
     overflow: hidden;
     padding-right:5px;

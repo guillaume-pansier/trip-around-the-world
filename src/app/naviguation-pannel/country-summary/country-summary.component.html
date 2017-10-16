@@ -12,13 +12,16 @@
       </tbody>
     </table>
   </div>
-  <h3>Go to...</h3>
-  <div *ngIf="this.countryPaths && this.countryPaths.length > 0 && this.countryPaths[0].getPreviousCountry()">
-    <h5>Previous Country</h5>
-    <a (click)="onCountryPathSelected(this.countryPaths[0].getPreviousCountry())">{{(getCountryOfCountryPath(this.countryPaths[0].getPreviousCountry()) | async).name}}</a>
-  </div>
-  <div *ngIf="this.countryPaths && this.countryPaths.length > 0 && this.countryPaths[this.countryPaths.length - 1].getNextCountry()">
-    <h5>Next Country</h5>
-    <a (click)="onCountryPathSelected(this.countryPaths[this.countryPaths.length - 1].getNextCountry())">{{(getCountryOfCountryPath(this.countryPaths[this.countryPaths.length - 1].getNextCountry()) | async).name}}</a>
+
+  <div *ngIf="this.countryPaths && this.countryPaths.length > 0">
+    <h3>Go to...</h3>
+    <div *ngIf="this.countryPaths[0].getPreviousCountry()">
+      <h5>Previous Country</h5>
+      <a (click)="onCountryPathSelected(this.countryPaths[0].getPreviousCountry())">{{(getCountryOfCountryPath(this.countryPaths[0].getPreviousCountry()) | async).name}}</a>
+    </div>
+    <div *ngIf="this.countryPaths[this.countryPaths.length - 1].getNextCountry()">
+      <h5>Next Country</h5>
+      <a (click)="onCountryPathSelected(this.countryPaths[this.countryPaths.length - 1].getNextCountry())">{{(getCountryOfCountryPath(this.countryPaths[this.countryPaths.length - 1].getNextCountry()) | async).name}}</a>
+    </div>
   </div>
 </div>

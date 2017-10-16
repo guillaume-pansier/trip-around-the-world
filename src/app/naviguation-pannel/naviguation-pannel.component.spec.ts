@@ -2,7 +2,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
-import { ModalModule } from 'ng2-bootstrap';
+import { ModalModule } from 'ngx-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { PathRepositoryService } from '../model/paths/path-repository.service';
@@ -10,7 +10,7 @@ import { Observable } from 'rxjs/Observable';
 import { empty } from 'rxjs/observable/empty';
 import { NaviguationPannelComponent } from './naviguation-pannel.component';
 import { ModalComponentComponent } from './modal-component/modal-component.component';
-import { ModalDirective } from 'ng2-bootstrap/ng2-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap';
 import { Path } from '../model/paths/path';
 import { Country } from '../model/country/country';
 import { CountryPath } from '../model/paths/country-path';

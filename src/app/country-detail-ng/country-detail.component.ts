@@ -45,6 +45,7 @@ export class CountryDetailComponent implements OnInit, OnDestroy {
   };
   countryChangeObserver: Subscription;
 
+
   constructor(private overlayRepository: OverlayRepositoryService,
     private geocoder: GeoCoder,
     @Inject(STATE_HANDLER_TOKEN) private stateHandler: ApplicationStateHandler,
