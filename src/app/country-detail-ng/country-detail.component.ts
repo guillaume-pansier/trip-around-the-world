@@ -44,7 +44,8 @@ export class CountryDetailComponent implements OnInit, OnDestroy {
     center: 'some-invalid-location',
   };
   countryChangeObserver: Subscription;
-
+  countryInitObserver: Subscription;
+  overlayInitObserver: Subscription;
 
   constructor(private overlayRepository: OverlayRepositoryService,
     private geocoder: GeoCoder,
@@ -54,7 +55,7 @@ export class CountryDetailComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
 
-    this.stateHandler.onCountryClicked()
+    this.countryInitObserver = this.stateHandler.onCountryClicked()
       .filter(country => country != null)
       .flatMap((country: Country) => {
         this.country = country;
@@ -122,7 +123,7 @@ export class CountryDetailComponent implements OnInit, OnDestroy {
   }
 
   private loadDataLayer() {
-    this.overlayRepository.getOverlayForCountryId(this.country.id)
+    this.overlayInitObserver = this.overlayRepository.getOverlayForCountryId(this.country.id)
       .subscribe((countryLayer) => {
         let layer = '[' + worldLayer + ',' + countryLayer + ']';
         let geoJson = {
@@ -252,6 +253,8 @@ export class CountryDetailComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.countryChangeObserver.unsubscribe();
+    this.overlayInitObserver.unsubscribe();
+    this.countryInitObserver.unsubscribe();
     // here you need to cancel the changes that you make and cause the `this.ref.detectChanges()` to be called.
     this.ref.detach(); // try this
     // this.authObserver.unsubscribe(); // for me I was detect changes inside "subscribe" so was enough for me to just unsubscribe;
